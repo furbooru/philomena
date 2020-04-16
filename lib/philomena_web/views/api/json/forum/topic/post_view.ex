@@ -42,27 +42,18 @@ defmodule PhilomenaWeb.Api.Json.Forum.Topic.PostView do
   end
 
   def render("post.json", %{conn: conn, post: post}) do
+    opts = %{image_transform: &Camo.Image.image_url/1}
     %{
       id: post.id,
       user_id: if(not post.anonymous, do: post.user_id),
       author: UserAttributionView.name(post),
       avatar: UserAttributionView.avatar_url(post),
-      body: parse_content(conn, post.body),
+      body: post.body,
+      body_html: Renderer.render_one(post, conn),
       created_at: post.created_at,
       updated_at: post.updated_at,
       edited_at: post.edited_at,
       edit_reason: post.edit_reason
     }
-  end
-
-  defp parse_content(conn, content) do
-    case conn.params do
-      %{"html" => "true"} ->
-        opts = %{image_transform: &Camo.Image.image_url/1}
-        Renderer.render_one(%{body: content}, conn)
-
-      _ ->
-        content
-    end
   end
 end

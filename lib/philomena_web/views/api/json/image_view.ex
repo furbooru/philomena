@@ -46,6 +46,7 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
   end
 
   def render("image.json", %{conn: conn, image: %{hidden_from_users: false} = image}) do
+    opts = %{image_transform: &Camo.Image.image_url/1}
     %{
       id: image.id,
       created_at: image.created_at,
@@ -71,7 +72,8 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
       faves: image.faves_count,
       comment_count: image.comments_count,
       tag_count: length(image.tags),
-      description: parse_content(conn, image.description),
+      description: image.description,
+      description_html: Renderer.render_one(%{body: image.description}, conn),
       source_url: image.source_url,
       view_url: ImageView.pretty_url(image, false, false),
       representations: ImageView.thumb_urls(image, false),
@@ -88,15 +90,4 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
     do: %{nw: nw, ne: ne, sw: sw, se: se}
 
   defp intensities(_), do: nil
-
-  defp parse_content(conn, content) do
-    case conn.params do
-      %{"html" => "true"} ->
-        opts = %{image_transform: &Camo.Image.image_url/1}
-        Renderer.render_one(%{body: content}, conn)
-
-      _ ->
-        content
-    end
-  end
 end
