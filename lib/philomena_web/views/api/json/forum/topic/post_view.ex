@@ -50,7 +50,7 @@ defmodule PhilomenaWeb.Api.Json.Forum.Topic.PostView do
       author: UserAttributionView.name(post),
       avatar: UserAttributionView.avatar_url(post),
       body: post.body,
-      body_html: Renderer.render_one(post, conn),
+      body_html: Renderer.render_one(post, opts),
       created_at: post.created_at,
       updated_at: post.updated_at,
       edited_at: post.edited_at,

@@ -74,7 +74,7 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
       comment_count: image.comments_count,
       tag_count: length(image.tags),
       description: image.description,
-      description_html: Renderer.render_one(%{body: image.description}, conn),
+      description_html: Renderer.render_one(%{body: image.description}, opts),
       source_url: image.source_url,
       view_url: ImageView.pretty_url(image, false, false),
       representations: ImageView.thumb_urls(image, false),

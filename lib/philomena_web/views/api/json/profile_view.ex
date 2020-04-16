@@ -15,7 +15,7 @@ defmodule PhilomenaWeb.Api.Json.ProfileView do
       slug: user.slug,
       role: role(user),
       description: user.description,
-      description_html: Renderer.render_one(%{body: user.description}, conn),
+      description_html: Renderer.render_one(%{body: user.description}, opts),
       avatar_url: avatar_url(user),
       created_at: user.created_at,
       comments_count: user.comments_posted_count,

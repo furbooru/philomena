@@ -57,7 +57,7 @@ defmodule PhilomenaWeb.Api.Json.CommentView do
       author: UserAttributionView.name(comment),
       avatar: UserAttributionView.avatar_url(comment),
       body: comment.body,
-      body_html: Renderer.render_one(comment, conn),
+      body_html: Renderer.render_one(comment, opts),
       created_at: comment.created_at,
       updated_at: comment.updated_at,
       edited_at: comment.edited_at,
