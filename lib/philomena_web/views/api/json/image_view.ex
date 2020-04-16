@@ -1,6 +1,7 @@
 defmodule PhilomenaWeb.Api.Json.ImageView do
   use PhilomenaWeb, :view
   alias PhilomenaWeb.ImageView
+  alias Philomena.Textile.Renderer
 
   def render("index.json", %{images: images, interactions: interactions, total: total} = assigns) do
     %{
@@ -70,7 +71,7 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
       faves: image.faves_count,
       comment_count: image.comments_count,
       tag_count: length(image.tags),
-      description: image.description,
+      description: parse_content(conn, image.description),
       source_url: image.source_url,
       view_url: ImageView.pretty_url(image, false, false),
       representations: ImageView.thumb_urls(image, false),
@@ -87,4 +88,15 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
     do: %{nw: nw, ne: ne, sw: sw, se: se}
 
   defp intensities(_), do: nil
+
+  defp parse_content(conn, content) do
+    case conn.params do
+      %{"html" => "true"} ->
+        opts = %{image_transform: &Camo.Image.image_url/1}
+        Renderer.render_one(%{body: content}, conn)
+
+      _ ->
+        content
+    end
+  end
 end

@@ -1,17 +1,18 @@
 defmodule PhilomenaWeb.Api.Json.ProfileView do
   use PhilomenaWeb, :view
+  alias Philomena.Textile.Renderer
 
   def render("show.json", %{user: user} = assigns) do
     %{user: render_one(user, PhilomenaWeb.Api.Json.ProfileView, "profile.json", assigns)}
   end
 
-  def render("profile.json", %{user: user} = assigns) do
+  def render("profile.json", %{conn: conn, user: user} = assigns) do
     %{
       id: user.id,
       name: user.name,
       slug: user.slug,
       role: role(user),
-      description: user.description,
+      description: parse_content(conn, user.description),
       avatar_url: avatar_url(user),
       created_at: user.created_at,
       comments_count: user.comments_posted_count,
@@ -43,5 +44,16 @@ defmodule PhilomenaWeb.Api.Json.ProfileView do
 
   defp avatar_url(user) do
     Application.get_env(:philomena, :avatar_url_root) <> "/" <> user.avatar
+  end
+
+  defp parse_content(conn, content) do
+    case conn.params do
+      %{"html" => "true"} ->
+        opts = %{image_transform: &Camo.Image.image_url/1}
+        Renderer.render_one(%{body: content}, conn)
+
+      _ ->
+        content
+    end
   end
 end
