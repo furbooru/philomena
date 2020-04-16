@@ -47,6 +47,7 @@ defmodule PhilomenaWeb.Api.Json.ImageView do
 
   def render("image.json", %{conn: conn, image: %{hidden_from_users: false} = image}) do
     opts = %{image_transform: &Camo.Image.image_url/1}
+
     %{
       id: image.id,
       created_at: image.created_at,

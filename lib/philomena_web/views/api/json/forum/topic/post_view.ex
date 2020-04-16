@@ -43,6 +43,7 @@ defmodule PhilomenaWeb.Api.Json.Forum.Topic.PostView do
 
   def render("post.json", %{conn: conn, post: post}) do
     opts = %{image_transform: &Camo.Image.image_url/1}
+
     %{
       id: post.id,
       user_id: if(not post.anonymous, do: post.user_id),

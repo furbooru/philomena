@@ -49,6 +49,7 @@ defmodule PhilomenaWeb.Api.Json.CommentView do
 
   def render("comment.json", %{conn: conn, comment: comment}) do
     opts = %{image_transform: &Camo.Image.image_url/1}
+
     %{
       id: comment.id,
       image_id: comment.image_id,

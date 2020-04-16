@@ -8,6 +8,7 @@ defmodule PhilomenaWeb.Api.Json.ProfileView do
 
   def render("profile.json", %{conn: conn, user: user} = assigns) do
     opts = %{image_transform: &Camo.Image.image_url/1}
+
     %{
       id: user.id,
       name: user.name,
