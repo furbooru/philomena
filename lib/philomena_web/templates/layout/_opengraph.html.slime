@@ -6,7 +6,7 @@ meta name="robots" content="noindex, nofollow"
 = if opengraph?(@conn) do
   - image = @conn.assigns.image
   - filtered = not image.thumbnails_generated
-  - description = "##{image.id} - #{image.tag_list_cache} - Derpibooru"
+  - description = "##{image.id} - #{image.tag_list_cache} - Furbooru"
 
   meta name="keywords" content=image.tag_list_cache
   meta name="description" content=description
@@ -41,4 +41,4 @@ meta name="robots" content="noindex, nofollow"
       meta property="og:type" content="website"
 
 - else
-  meta name="description" content="Derpibooru is a linear imagebooru which lets you share, find and discover new art and media surrounding the show My Little Pony: Friendship is Magic"
+  meta name="description" content="Furbooru is a linear imagebooru which lets you share, find and discover new art and media surrounding the show My Little Pony: Friendship is Magic"
