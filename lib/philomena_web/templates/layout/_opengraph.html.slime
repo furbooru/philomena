@@ -41,4 +41,4 @@ meta name="robots" content="noindex, nofollow"
       meta property="og:type" content="website"
 
 - else
-  meta name="description" content="Furbooru is a linear imagebooru which lets you share, find and discover new art and media surrounding the show My Little Pony: Friendship is Magic"
+  meta name="description" content="Furbooru is a linear imagebooru which lets you share, find and discover new art and media surrounding the furry fandom."
