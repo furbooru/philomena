@@ -53,12 +53,13 @@
 
 // Tags
 .tag {
-  display: inline-block;
+  display: inline-flex;
+  line-height: 28px;
+  vertical-align: middle;
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
   margin-right: 5px;
-  padding: 6px;
 }
 
 .tag a {
@@ -66,8 +67,14 @@
 }
 
 .tag__count {
+  margin-left: 8px;
+  padding: 0 4px;
   color: $foreground-color;
   font-weight: normal;
+}
+
+.tag__interaction {
+  padding: 0 4px;
 }
 
 .tag__dropdown__link {
@@ -80,52 +87,72 @@
 
 .tag {
   background: $tag_normal_background;
-  border-color: $tag_normal_border;
   color: $tag_normal_color;
+  .tag__count {
+    background-color: $tag_normal_border;
+  }
   &[data-tag-category="rating"] {
     background: $tag_category_rating_background;
-    border-color: $tag_category_rating_border;
     color: $tag_category_rating_color;
+    .tag__count {
+      background-color: $tag_category_rating_border;
+    }
   }
   &[data-tag-category="spoiler"] {
     background: $tag_category_spoiler_background;
-    border-color: $tag_category_spoiler_border;
     color: $tag_category_spoiler_color;
+    .tag__count {
+      background-color: $tag_category_spoiler_border;
+    }
   }
   &[data-tag-category="origin"] {
     background: $tag_category_origin_background;
-    border-color: $tag_category_origin_border;
     color: $tag_category_origin_color;
+    .tag__count {
+      background-color: $tag_category_origin_border;
+    }
   }
   &[data-tag-category="oc"] {
     background: $tag_category_oc_background;
-    border-color: $tag_category_oc_border;
     color: $tag_category_oc_color;
+    .tag__count {
+      background-color: $tag_category_oc_border;
+    }
   }
   &[data-tag-category="error"] {
     background: $tag_category_error_background;
-    border-color: $tag_category_error_border;
     color: $tag_category_error_color;
+    .tag__count {
+      background-color: $tag_category_error_border;
+    }
   }
   &[data-tag-category="character"] {
     background: $tag_category_character_background;
-    border-color: $tag_category_character_border;
     color: $tag_category_character_color;
+    .tag__count {
+      background-color: $tag_category_character_border;
+    }
   }
   &[data-tag-category="content-official"] {
     background: $tag_category_content_official_background;
-    border-color: $tag_category_content_official_border;
     color: $tag_category_content_official_color;
+    .tag__count {
+      background-color: $tag_category_content_official_border;
+    }
   }
   &[data-tag-category="content-fanmade"] {
     background: $tag_category_content_fanmade_background;
-    border-color: $tag_category_content_fanmade_border;
     color: $tag_category_content_fanmade_color;
+    .tag__count {
+      background-color: $tag_category_content_fanmade_border;
+    }
   }
   &[data-tag-category="species"] {
     background: $tag_category_species_background;
-    border-color: $tag_category_species_border;
     color: $tag_category_species_color;
+    .tag__count {
+      background-color: $tag_category_species_border;
+    }
   }
 }
 
