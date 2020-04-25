@@ -21,6 +21,12 @@
   max-height: 50vh;
   padding-bottom: 0;
   margin-bottom: 4px;
+  .tag {
+    padding: 0 6px;
+  }
+  a {
+    margin-left: 6px;
+  }
 }
 
 .tagsinput.js-taginput .input {
