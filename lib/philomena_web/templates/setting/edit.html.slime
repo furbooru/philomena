@@ -52,10 +52,6 @@ h1 Content Settings
       .block__tab.hidden.flex.flex--maybe-wrap data-tab="display"
         div
           .field
-            => label f, :use_centered_layout
-            => checkbox f, :use_centered_layout, class: "checkbox"
-            .fieldlabel: i Align content to the center of the page - try this option out if you browse the site on a tablet or a fairly wide screen.
-          .field
             => label f, :hide_vote_counts
             => checkbox f, :hide_vote_counts, class: "checkbox"
             .fieldlabel: i Hide upvote and downvote counts on images, showing only the overall score

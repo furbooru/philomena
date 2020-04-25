@@ -9,8 +9,7 @@ defmodule PhilomenaWeb.LayoutView do
     conn.assigns[:layout_class] || "layout--narrow"
   end
 
-  def container_class(%{use_centered_layout: true}), do: "layout--center-aligned"
-  def container_class(_user), do: nil
+  def container_class(_user), do: "layout--center-aligned"
 
   def render_time(conn) do
     (Time.diff(Time.utc_now(), conn.assigns[:start_time], :microsecond) / 1000.0)
@@ -69,8 +68,8 @@ defmodule PhilomenaWeb.LayoutView do
   def stylesheet_path(conn, %{theme: "dark"}),
     do: Routes.static_path(conn, "/css/dark.css")
 
-  def stylesheet_path(conn, %{theme: "red"}),
-    do: Routes.static_path(conn, "/css/red.css")
+  def stylesheet_path(conn, %{theme: "light"}),
+    do: Routes.static_path(conn, "/css/light.css")
 
   def stylesheet_path(conn, _user),
     do: Routes.static_path(conn, "/css/default.css")

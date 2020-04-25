@@ -9,8 +9,8 @@ module.exports = {
         'css/dark.css': [
           'css/themes/dark.scss'
         ],
-        'css/red.css': [
-          'css/themes/red.scss'
+        'css/light.css': [
+          'css/themes/light.scss'
         ]
       }
     }
@@ -59,7 +59,7 @@ module.exports = {
     assets: /static\//
   },
   paths: {
-    watched: ['css/themes/default.scss', 'css/themes/dark.scss', 'css/themes/red.scss', 'js/app.js', 'vendor', 'fonts', 'static'],
+    watched: ['css/themes/default.scss', 'css/themes/dark.scss', 'css/themes/light.scss', 'js/app.js', 'vendor', 'fonts', 'static'],
     public: '../priv/static'
   },
   modules: {
