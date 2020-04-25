@@ -43,7 +43,7 @@ defmodule PhilomenaWeb.UserAttributionView do
     class = Enum.join(["image-constrained", class], " ")
 
     content_tag :div, class: class do
-      AvatarGeneratorView.generated_avatar(name)
+      raw "<img xlink:href=\"/images/no_avatar.svg\" src=\"/images/no_avatar.svg\">"
     end
   end
 
@@ -71,14 +71,16 @@ defmodule PhilomenaWeb.UserAttributionView do
     avatar_url_root() <> "/" <> avatar
   end
 
-  def anonymous_avatar_url(name) do
-    svg =
-      name
-      |> AvatarGeneratorView.generated_avatar()
-      |> Enum.map_join(&safe_to_string/1)
+  def anonymous_avatar_url(_), do: "/images/no_avatar.svg"
 
-    "data:image/svg+xml;base64," <> Base.encode64(svg)
-  end
+  # def anonymous_avatar_url(name) do
+  #   svg =
+  #     name
+  #     |> AvatarGeneratorView.generated_avatar()
+  #     |> Enum.map_join(&safe_to_string/1)
+
+  #   "data:image/svg+xml;base64," <> Base.encode64(svg)
+  # end
 
   def user_labels(%{user: user}) do
     []
