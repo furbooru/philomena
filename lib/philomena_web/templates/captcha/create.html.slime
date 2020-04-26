@@ -1,11 +1,11 @@
 elixir:
   options = [
-    "Applejack": 1,
-    "Fluttershy": 2,
-    "Pinkie Pie": 3,
-    "Rainbow Dash": 4,
-    "Rarity": 5,
-    "Twilight Sparkle": 6
+    "Shark": 1,
+    "Feline": 2,
+    "Canine": 3,
+    "Equine": 4,
+    "Avian": 5,
+    "Rodent": 6
   ]
 
 div
