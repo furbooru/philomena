@@ -15,6 +15,6 @@ div
   = for i <- (1..6) do
     .field
       label> for="captcha_sln[#{i}]"
-        | Name of pony with cutie mark #
+        | Name of the animal (species) #
         = i
       = select :captcha, "sln[#{i}]", options, class: "input", name: "captcha[sln][#{i}]"
