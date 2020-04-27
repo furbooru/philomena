@@ -74,6 +74,10 @@ defmodule PhilomenaWeb.LayoutView do
   def stylesheet_path(conn, _user),
     do: Routes.static_path(conn, "/css/default.css")
 
+  def theme_color(%{theme: "dark"}), do: "#284371"
+  def theme_color(%{theme: "light"}), do: "#3d92d0"
+  def theme_color(_user), do: "#36274e"
+
   def theme_name(%{theme: theme}), do: theme
   def theme_name(_user), do: "default"
 
