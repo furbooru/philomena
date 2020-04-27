@@ -74,8 +74,7 @@ defmodule Philomena.DnpEntries.DnpEntry do
        "I only want to allow art of a certain type or from a certain location to be uploaded to Furbooru"},
       {"With Permission Only",
        "I only want people with my permission to be allowed to upload my art to Furbooru"},
-      {"Artist Upload Only",
-       "I want to be the only person allowed to upload my art to Furbooru"},
+      {"Artist Upload Only", "I want to be the only person allowed to upload my art to Furbooru"},
       {"Other", "I would like a DNP entry under other conditions"}
     ]
   end

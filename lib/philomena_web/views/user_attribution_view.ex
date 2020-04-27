@@ -3,7 +3,8 @@ defmodule PhilomenaWeb.UserAttributionView do
   use Bitwise
 
   alias Philomena.Attribution
-#  alias PhilomenaWeb.AvatarGeneratorView
+
+  #  alias PhilomenaWeb.AvatarGeneratorView
 
   def anonymous?(object) do
     Attribution.anonymous?(object)
@@ -43,7 +44,7 @@ defmodule PhilomenaWeb.UserAttributionView do
     class = Enum.join(["image-constrained", class], " ")
 
     content_tag :div, class: class do
-      raw "<img xlink:href=\"/images/no_avatar.svg\" src=\"/images/no_avatar.svg\">"
+      raw("<img xlink:href=\"/images/no_avatar.svg\" src=\"/images/no_avatar.svg\">")
     end
   end
 
