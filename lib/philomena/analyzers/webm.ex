@@ -11,7 +11,7 @@ defmodule Philomena.Analyzers.Webm do
 
   defp duration(file) do
     with {output, 0} <-
-           System.cmd("ffprobe", [
+           System.cmd(ffprobe_path(), [
              "-i",
              file,
              "-show_entries",
@@ -30,7 +30,7 @@ defmodule Philomena.Analyzers.Webm do
   end
 
   defp dimensions(file) do
-    System.cmd("ffprobe", [
+    System.cmd(ffprobe_path(), [
       "-i",
       file,
       "-show_entries",
@@ -54,4 +54,6 @@ defmodule Philomena.Analyzers.Webm do
         {0, 0}
     end
   end
+
+  defp ffprobe_path, do: Application.get_env(:philomena, :ffprobe_path)
 end

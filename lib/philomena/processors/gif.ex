@@ -38,7 +38,7 @@ defmodule Philomena.Processors.Gif do
     preview = Briefly.create!(extname: ".png")
 
     {_output, 0} =
-      System.cmd("ffmpeg", [
+      System.cmd(ffmpeg_path(), [
         "-loglevel",
         "0",
         "-y",
@@ -58,7 +58,7 @@ defmodule Philomena.Processors.Gif do
     palette = Briefly.create!(extname: ".png")
 
     {_output, 0} =
-      System.cmd("ffmpeg", [
+      System.cmd(ffmpeg_path(), [
         "-loglevel",
         "0",
         "-y",
@@ -100,7 +100,7 @@ defmodule Philomena.Processors.Gif do
     filter_graph = "[0:v] #{scale_filter} [x]; [x][1:v] #{palette_filter}"
 
     {_output, 0} =
-      System.cmd("ffmpeg", [
+      System.cmd(ffmpeg_path(), [
         "-loglevel",
         "0",
         "-y",
@@ -121,7 +121,7 @@ defmodule Philomena.Processors.Gif do
     mp4 = Briefly.create!(extname: ".mp4")
 
     {_output, 0} =
-      System.cmd("ffmpeg", [
+      System.cmd(ffmpeg_path(), [
         "-loglevel",
         "0",
         "-y",
@@ -139,7 +139,7 @@ defmodule Philomena.Processors.Gif do
       ])
 
     {_output, 0} =
-      System.cmd("ffmpeg", [
+      System.cmd(ffmpeg_path(), [
         "-loglevel",
         "0",
         "-y",
@@ -167,4 +167,6 @@ defmodule Philomena.Processors.Gif do
       {:copy, mp4, "full.mp4"}
     ]
   end
+
+  defp ffmpeg_path, do: Application.get_env(:philomena, :ffmpeg_path)
 end

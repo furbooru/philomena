@@ -13,7 +13,7 @@ defmodule Philomena.Analyzers.Png do
   end
 
   defp animated?(file) do
-    System.cmd("ffprobe", [
+    System.cmd(Application.get_env(:philomena, :ffprobe_path), [
       "-i",
       file,
       "-v",

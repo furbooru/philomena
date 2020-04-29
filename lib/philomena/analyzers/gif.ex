@@ -32,7 +32,7 @@ defmodule Philomena.Analyzers.Gif do
 
   defp duration(true, file) do
     with {output, 0} <-
-           System.cmd("ffprobe", [
+           System.cmd(Application.get_env(:philomena, :ffprobe_path), [
              "-i",
              file,
              "-show_entries",
