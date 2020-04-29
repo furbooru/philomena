@@ -66,6 +66,8 @@ defmodule Philomena.Processors.Jpeg do
         file,
         "-vf",
         scale_filter,
+        "-q:v",
+        "1",
         scaled
       ])
 
