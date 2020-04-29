@@ -44,7 +44,16 @@ defmodule Philomena.Processors.Svg do
     scale_filter = "scale=w=#{width}:h=#{height}:force_original_aspect_ratio=decrease"
 
     {_output, 0} =
-      System.cmd(Application.get_env(:philomena, :ffmpeg_path), ["-loglevel", "0", "-y", "-i", preview, "-vf", scale_filter, scaled])
+      System.cmd(Application.get_env(:philomena, :ffmpeg_path), [
+        "-loglevel",
+        "0",
+        "-y",
+        "-i",
+        preview,
+        "-vf",
+        scale_filter,
+        scaled
+      ])
 
     {_output, 0} = System.cmd("optipng", ["-i0", "-o1", "-quiet", "-clobber", scaled])
 
