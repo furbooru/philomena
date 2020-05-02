@@ -3,12 +3,9 @@
  * to be placed in this directory, and they are imported at the bottom of the file.
  *
  * Define rules that are not supposed to be overridden after the @import at the bottom of the file.
- *
- * NOTE: do not enable require_self and require_tree because it imports things the wrong way around!
- * = require_self
- * = require_tree .
 */
 
+@import "dimensions";
 @import "global";
 
 // Because FA is a SPECIAL SNOWFLAKE.
