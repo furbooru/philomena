@@ -25,12 +25,12 @@
       "url": "/pages/uploading"
     },
     {
-      "title": "Spoiler Guidelines",
-      "url": "/pages/spoilers"
-    },
-    {
       "title": "Takedown Requests",
       "url": "/pages/takedowns"
+    },
+    {
+      "title": "Do-Not-Post List",
+      "url": "/dnp"
     }
   ],
   "Help & Information": [
@@ -55,10 +55,6 @@
     {
       "title": "Advertising",
       "url": "/pages/advertising"
-    },
-    {
-      "title": "Do-Not-Post List",
-      "url": "/dnp"
     }
   ],
   "Community": [
