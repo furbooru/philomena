@@ -4,13 +4,13 @@
     "watch": "brunch watch --stdin"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.12.0",
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "brunch": "^3.0.0",
     "copycat-brunch": "^1.1.1"
   },
   "devDependencies": {
     "acorn": "^7.1.1",
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^9.7.6",
     "normalize-scss": "^7.0.1",
     "rollup-brunch": "git+https://github.com/liamwhite/rollup-brunch.git#31967fc",
     "sass-brunch": "git+https://github.com/brunch/sass-brunch.git#e9c0bfe",
