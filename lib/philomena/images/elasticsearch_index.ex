@@ -7,11 +7,6 @@ defmodule Philomena.Images.ElasticsearchIndex do
   end
 
   @impl true
-  def doc_type do
-    "image"
-  end
-
-  @impl true
   def mapping do
     %{
       settings: %{
@@ -137,6 +132,38 @@ defmodule Philomena.Images.ElasticsearchIndex do
       upvoters: image.upvoters |> Enum.map(&String.downcase(&1.name)),
       downvoters: image.downvoters |> Enum.map(&String.downcase(&1.name)),
       deleted_by_user: if(!!image.deleter, do: image.deleter.name)
+    }
+  end
+
+  def user_name_update_by_query(old_name, new_name) do
+    old_name = String.downcase(old_name)
+    new_name = String.downcase(new_name)
+
+    %{
+      query: %{
+        bool: %{
+          should: [
+            %{term: %{uploader: old_name}},
+            %{term: %{true_uploader: old_name}},
+            %{term: %{deleted_by_user: old_name}},
+            %{term: %{favourited_by_users: old_name}},
+            %{term: %{hidden_by_users: old_name}},
+            %{term: %{upvoters: old_name}},
+            %{term: %{downvoters: old_name}}
+          ]
+        }
+      },
+      replacements: [
+        %{path: ["uploader"], old: old_name, new: new_name},
+        %{path: ["true_uploader"], old: old_name, new: new_name},
+        %{path: ["deleted_by_user"], old: old_name, new: new_name}
+      ],
+      set_replacements: [
+        %{path: ["favourited_by_users"], old: old_name, new: new_name},
+        %{path: ["hidden_by_users"], old: old_name, new: new_name},
+        %{path: ["upvoters"], old: old_name, new: new_name},
+        %{path: ["downvoters"], old: old_name, new: new_name}
+      ]
     }
   end
 

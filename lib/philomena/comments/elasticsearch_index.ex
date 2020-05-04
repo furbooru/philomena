@@ -7,11 +7,6 @@ defmodule Philomena.Comments.ElasticsearchIndex do
   end
 
   @impl true
-  def doc_type do
-    "comment"
-  end
-
-  @impl true
   def mapping do
     %{
       settings: %{
@@ -55,6 +50,14 @@ defmodule Philomena.Comments.ElasticsearchIndex do
       anonymous: comment.anonymous,
       hidden_from_users: comment.image.hidden_from_users || comment.hidden_from_users,
       body: comment.body
+    }
+  end
+
+  def user_name_update_by_query(old_name, new_name) do
+    %{
+      query: %{term: %{author: old_name}},
+      replacements: [%{path: ["author"], old: old_name, new: new_name}],
+      set_replacements: []
     }
   end
 end

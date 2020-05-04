@@ -7,11 +7,6 @@ defmodule Philomena.Galleries.ElasticsearchIndex do
   end
 
   @impl true
-  def doc_type do
-    "gallery"
-  end
-
-  @impl true
   def mapping do
     %{
       settings: %{
@@ -54,6 +49,17 @@ defmodule Philomena.Galleries.ElasticsearchIndex do
       creator: String.downcase(gallery.creator.name),
       image_ids: Enum.map(gallery.interactions, & &1.image_id),
       description: gallery.description
+    }
+  end
+
+  def user_name_update_by_query(old_name, new_name) do
+    old_name = String.downcase(old_name)
+    new_name = String.downcase(new_name)
+
+    %{
+      query: %{term: %{creator: old_name}},
+      replacements: [%{path: ["creator"], old: old_name, new: new_name}],
+      set_replacements: []
     }
   end
 end

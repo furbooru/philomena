@@ -7,11 +7,6 @@ defmodule Philomena.Posts.ElasticsearchIndex do
   end
 
   @impl true
-  def doc_type do
-    "post"
-  end
-
-  @impl true
   def mapping do
     %{
       settings: %{
@@ -67,6 +62,17 @@ defmodule Philomena.Posts.ElasticsearchIndex do
       deleted: post.hidden_from_users,
       access_level: post.topic.forum.access_level,
       destroyed_content: post.destroyed_content
+    }
+  end
+
+  def user_name_update_by_query(old_name, new_name) do
+    old_name = String.downcase(old_name)
+    new_name = String.downcase(new_name)
+
+    %{
+      query: %{term: %{author: old_name}},
+      replacements: [%{path: ["author"], old: old_name, new: new_name}],
+      set_replacements: []
     }
   end
 end

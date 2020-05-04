@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.1 (Debian 12.1-1.pgdg100+1)
--- Dumped by pg_dump version 12.1 (Debian 12.1-1.pgdg90+1)
+-- Dumped from database version 12.2 (Debian 12.2-2.pgdg100+1)
+-- Dumped by pg_dump version 12.2 (Debian 12.2-2.pgdg90+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -789,6 +789,37 @@ ALTER SEQUENCE public.image_intensities_id_seq OWNED BY public.image_intensities
 
 
 --
+-- Name: image_sources; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.image_sources (
+    id bigint NOT NULL,
+    image_id bigint NOT NULL,
+    source text NOT NULL,
+    CONSTRAINT length_must_be_valid CHECK (((length(source) >= 8) AND (length(source) <= 1024)))
+);
+
+
+--
+-- Name: image_sources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.image_sources_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: image_sources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.image_sources_id_seq OWNED BY public.image_sources.id;
+
+
+--
 -- Name: image_subscriptions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1242,7 +1273,8 @@ ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
 --
 
 CREATE TABLE public.schema_migrations (
-    version character varying NOT NULL
+    version bigint NOT NULL,
+    inserted_at timestamp(0) without time zone
 );
 
 
@@ -2149,6 +2181,13 @@ ALTER TABLE ONLY public.image_intensities ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: image_sources id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.image_sources ALTER COLUMN id SET DEFAULT nextval('public.image_sources_id_seq'::regclass);
+
+
+--
 -- Name: images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2497,6 +2536,14 @@ ALTER TABLE ONLY public.image_intensities
 
 
 --
+-- Name: image_sources image_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.image_sources
+    ADD CONSTRAINT image_sources_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2733,6 +2780,13 @@ ALTER TABLE ONLY public.versions
 --
 
 CREATE INDEX image_intensities_index ON public.image_intensities USING btree (nw, ne, sw, se);
+
+
+--
+-- Name: image_sources_image_id_source_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX image_sources_image_id_source_index ON public.image_sources USING btree (image_id, source);
 
 
 --
@@ -4648,7 +4702,15 @@ ALTER TABLE ONLY public.gallery_subscriptions
 
 
 --
+-- Name: image_sources image_sources_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.image_sources
+    ADD CONSTRAINT image_sources_image_id_fkey FOREIGN KEY (image_id) REFERENCES public.images(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-INSERT INTO public."schema_migrations" (version) VALUES (20160808041755), (20160809232725), (20160822170235), (20160913153024), (20160915233149), (20160918200925), (20160919034130), (20160920021519), (20160925132327), (20160929150114), (20161009141824), (20161011224029), (20161029012511), (20161030191614), (20161030215925), (20161031002200), (20161031114954), (20161209080614), (20161210105940), (20161228103559), (20170108031907), (20170216020601), (20170326235920), (20170327072407), (20170410193327), (20170412013535), (20170425214508), (20170425225954), (20170502231917), (20170621040031), (20170621062427), (20170807225232), (20170910003727), (20170910131245), (20170915013822), (20171020012152), (20171205041859), (20180105002050), (20180105181254), (20180126224124), (20180202052820), (20180223224631), (20180225143247), (20180225163429), (20180310033852), (20180310042958), (20180329014502), (20180331052125), (20180526094815), (20180616192644), (20180705201559), (20180714221027), (20180825145354), (20190124231823), (20190414222338), (20190419011106), (20190430174334), (20190511144122), (20190526141623), (20190526150817), (20190526182309), (20190526211227), (20190616175122), (20190630124943), (20190701020707), (20190720141012), (20190720144118), (20190725001227), (20190727205108), (20190729205120), (20190729223821), (20190809212148), (20190810011525);
+INSERT INTO public."schema_migrations" (version) VALUES (20200503002523);
