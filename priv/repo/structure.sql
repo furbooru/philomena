@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.2 (Debian 12.2-2.pgdg100+1)
--- Dumped by pg_dump version 12.2 (Debian 12.2-2.pgdg90+1)
+-- Dumped by pg_dump version 12.2 (Debian 12.2-2.pgdg100+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -4714,3 +4714,4 @@ ALTER TABLE ONLY public.image_sources
 --
 
 INSERT INTO public."schema_migrations" (version) VALUES (20200503002523);
+
