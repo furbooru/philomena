@@ -29,6 +29,10 @@
   .block
     .block__header
       span.block__header__title General user flags
+    ul
+      p
+        strong> Do not issue these permissions to site staff.
+        | Staff members with relevant roles will have these permissions anyway. Issuing them may break certain permissions, such as tag aliasing.
     ul = collection_checkboxes f, :roles, filtered_roles(general_permissions(), @roles), mapper: &checkbox_mapper/6
 
   .block

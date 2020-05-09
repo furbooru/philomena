@@ -155,6 +155,9 @@ defimpl Canada.Can, for: [Atom, Philomena.Users.User] do
   def can?(%User{role: "moderator", role_map: %{"StaticPage" => "admin"}}, _action, %StaticPage{}),
     do: true
 
+  # Mods can always batch tag
+  def can?(%User{role: "moderator"}, :batch_update, Tag), do: true
+
   #
   # Assistants can...
   #
