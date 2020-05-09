@@ -135,6 +135,7 @@ defmodule PhilomenaWeb.Profile.CommissionController do
     user_id = conn.assigns.user.id
 
     case conn.assigns.current_user do
+      %{role: "admin"} -> conn
       %{id: ^user_id} -> conn
       _other -> PhilomenaWeb.NotAuthorizedPlug.call(conn)
     end
