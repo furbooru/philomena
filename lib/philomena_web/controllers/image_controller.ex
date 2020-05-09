@@ -4,20 +4,17 @@ defmodule PhilomenaWeb.ImageController do
   alias PhilomenaWeb.ImageLoader
   alias PhilomenaWeb.CommentLoader
   alias PhilomenaWeb.NotificationCountPlug
+  alias PhilomenaWeb.TextileRenderer
 
   alias Philomena.{
     Images,
     Images.Image,
     Comments.Comment,
-    Galleries.Gallery,
-    Textile.Renderer
+    Galleries.Gallery
   }
 
-  # alias Philomena.Servers.ImageProcessor
-  alias Philomena.UserStatistics
   alias Philomena.Interactions
   alias Philomena.Comments
-  alias Philomena.Tags
   alias Philomena.Repo
   import Ecto.Query
 
@@ -56,13 +53,13 @@ defmodule PhilomenaWeb.ImageController do
 
     comments = CommentLoader.load_comments(conn, image)
 
-    rendered = Renderer.render_collection(comments.entries, conn)
+    rendered = TextileRenderer.render_collection(comments.entries, conn)
 
     comments = %{comments | entries: Enum.zip(comments.entries, rendered)}
 
     description =
       %{body: image.description}
-      |> Renderer.render_one(conn)
+      |> TextileRenderer.render_one(conn)
 
     interactions = Interactions.user_interactions([image], conn.assigns.current_user)
 
@@ -111,15 +108,6 @@ defmodule PhilomenaWeb.ImageController do
 
     case Images.create_image(attributes, image_params) do
       {:ok, %{image: image}} ->
-        spawn(fn ->
-          Images.repair_image(image)
-        end)
-
-        # ImageProcessor.cast(image.id)
-        Images.reindex_image(image)
-        Tags.reindex_tags(image.added_tags)
-        UserStatistics.inc_stat(conn.assigns.current_user, :uploads)
-
         conn
         |> put_flash(:info, "Image created successfully.")
         |> redirect(to: Routes.image_path(conn, :show, image))

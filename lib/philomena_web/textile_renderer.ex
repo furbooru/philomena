@@ -1,6 +1,5 @@
-defmodule Philomena.Textile.Renderer do
-  # todo: belongs in PhilomenaWeb
-  alias Textile.Parser
+defmodule PhilomenaWeb.TextileRenderer do
+  alias Philomena.Textile.Parser
   alias Philomena.Images.Image
   alias Philomena.Repo
   import Phoenix.HTML
