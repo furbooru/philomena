@@ -22,3 +22,15 @@ export function delegate(node, event, selectors) {
     }
   });
 }
+
+export function debounce(time, func) {
+  let timerId = null;
+
+  return function() {
+    // Cancels the setTimeout method execution
+    timerId && clearTimeout(timerId);
+
+    // Executes the func after delay time.
+    timerId = setTimeout(func, time);
+  };
+}

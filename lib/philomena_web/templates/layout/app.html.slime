@@ -18,6 +18,7 @@ html lang="en"
     meta name="format-detection" content="telephone=no"
     meta name="robots" content="noindex, nofollow"
     = csrf_meta_tag()
+    script type="text/javascript" src=Routes.static_path(@conn, "/remarkable.min.js")
     script type="text/javascript" src=Routes.static_path(@conn, "/js/app.js") async="async"
     = render PhilomenaWeb.LayoutView, "_opengraph.html", assigns
   body data-theme=theme_name(@current_user)

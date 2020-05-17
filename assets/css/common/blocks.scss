@@ -215,3 +215,35 @@ a.block__header--single-item, .block__header a {
     display: none;
   }
 }
+
+.block__content--top-border {
+  border-top: $border;
+}
+
+.block__column__header {
+  font-size: 14px;
+  line-height: $block_header_sub_height;
+  margin-bottom: $header_field_spacing;
+  border-bottom: 1px solid;
+  font-weight: bold;
+}
+
+@media (min-width: $min_px_width_for_desktop_layout) {
+  .block--split {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+
+  .block__column--half {
+    flex: 0 0 50%;
+    box-sizing: border-box;
+
+    &:first-child {
+      padding-right: $block-spacing;
+    }
+    &:last-child {
+      padding-left: $block-spacing;
+    }
+  }
+}

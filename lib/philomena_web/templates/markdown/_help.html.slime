@@ -2,14 +2,12 @@
   strong<> Syntax quick reference:
 
   span
-    strong>
-      ' *bold*
-    em> _italic_
-    span.spoiler>
-      | [spoiler]hide text[/spoiler]
-    code> @code@
-    ins> +underline+
-    del> -strike-
+    strong> *bold*
+    em> **italic**
+    span.spoiler> ||hide text||
+    code> `code`
+    ins> __underline__
+    del> ~~strike~~
     sup> ^sup^
     sub ~sub~
 
@@ -17,11 +15,11 @@
     ' &hellip;
 
   p.hidden.textile_help
-    ' [==stuff you don't want textile to parse==]
+    ' Escape formatting using \ e.g. \* for a literal star character
     br
 
     ins> Links:
-    ' "On-site link":/some-link, "External link":http://some-link
+    ' [On-site link](/some-link), [External link](http://some-link)
     br
 
     ins> Images:
@@ -29,7 +27,7 @@
     br
 
     ins> External images:
-    ' !http://some-image!, !http://some-clickable-image!:http://some-link
+    ' ![alt text](http://some-image), [![alt text](http://some-clickable-image)](http://some-link)
     br
 
     strong> Remember to use embeds (&gt;&gt;) for booru images as these let users filter content they don't want to see
