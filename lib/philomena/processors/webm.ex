@@ -190,11 +190,7 @@ defmodule Philomena.Processors.Webm do
     {new_width, new_height}
   end
 
-<<<<<<< HEAD
-  defp ffmpeg_path, do: Application.get_env(:philomena, :ffmpeg_path)
-=======
   # Avoid division by zero
   def rate_filter(duration) when duration > 0.5, do: "fps=1/#{duration / 10},settb=1/2,setpts=N"
   def rate_filter(_duration), do: "setpts=N/TB/2"
->>>>>>> derpi/master
 end
