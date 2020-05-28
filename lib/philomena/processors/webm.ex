@@ -28,19 +28,7 @@ defmodule Philomena.Processors.Webm do
   defp preview(duration, file) do
     preview = Briefly.create!(extname: ".png")
 
-    {_output, 0} =
-      System.cmd(ffmpeg_path(), [
-        "-loglevel",
-        "0",
-        "-y",
-        "-i",
-        file,
-        "-ss",
-        to_string(duration / 2),
-        "-frames:v",
-        "1",
-        preview
-      ])
+    {_output, 0} = System.cmd("mediathumb", [file, to_string(duration / 2), preview])
 
     preview
   end
@@ -113,7 +101,7 @@ defmodule Philomena.Processors.Webm do
         "-threads",
         "1",
         "-max_muxing_queue_size",
-        "512",
+        "4096",
         webm
       ])
 
@@ -141,19 +129,19 @@ defmodule Philomena.Processors.Webm do
         "-threads",
         "1",
         "-max_muxing_queue_size",
-        "512",
+        "4096",
         mp4
       ])
 
     {webm, mp4}
   end
 
-  defp scale_gif(file, palette, _duration, {width, height}) do
+  defp scale_gif(file, palette, duration, {width, height}) do
     gif = Briefly.create!(extname: ".gif")
     scale_filter = "scale=w=#{width}:h=#{height}:force_original_aspect_ratio=decrease"
     palette_filter = "paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle"
-    rate_filter = "setpts=N/TB/2"
-    filter_graph = "[0:v] #{scale_filter},#{rate_filter} [x]; [x][1:v] #{palette_filter}"
+    rate_filter = rate_filter(duration)
+    filter_graph = "[0:v]#{scale_filter},#{rate_filter}[x];[x][1:v]#{palette_filter}"
 
     {_output, 0} =
       System.cmd(ffmpeg_path(), [
@@ -202,5 +190,11 @@ defmodule Philomena.Processors.Webm do
     {new_width, new_height}
   end
 
+<<<<<<< HEAD
   defp ffmpeg_path, do: Application.get_env(:philomena, :ffmpeg_path)
+=======
+  # Avoid division by zero
+  def rate_filter(duration) when duration > 0.5, do: "fps=1/#{duration / 10},settb=1/2,setpts=N"
+  def rate_filter(_duration), do: "setpts=N/TB/2"
+>>>>>>> derpi/master
 end

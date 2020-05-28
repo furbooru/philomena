@@ -1,9 +1,9 @@
 span.tag.dropdown data-tag-category="#{@tag.category}" data-tag-id="#{@tag.id}" data-tag-name="#{@tag.name}" data-tag-slug="#{@tag.slug}"
   span.tag__interaction
     span.tag__state.hidden title="Unwatched"
-      |  +
+      | +
     span.tag__state.hidden title="Watched"
-      |  -
+      | -
     span.tag__state.hidden title="Spoilered"
       | S
     span.tag__state.hidden title="Hidden"

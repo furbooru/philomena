@@ -35,37 +35,9 @@ defmodule Philomena.Processors.Gif do
   end
 
   defp preview(duration, file) do
-    h264_equiv = Briefly.create!(extname: ".mp4")
     preview = Briefly.create!(extname: ".png")
 
-    # Hack workaround for broken FFmpeg behavior which
-    # cannot correctly seek in GIF image files
-
-    {_output, 0} =
-      System.cmd(ffmpeg_path(), [
-        "-loglevel",
-        "0",
-        "-y",
-        "-i",
-        file,
-        "-c:v",
-        "libx264",
-        h264_equiv
-      ])
-
-    {_output, 0} =
-      System.cmd(ffmpeg_path(), [
-        "-loglevel",
-        "0",
-        "-y",
-        "-i",
-        h264_equiv,
-        "-ss",
-        to_string(duration / 2),
-        "-frames:v",
-        "1",
-        preview
-      ])
+    {_output, 0} = System.cmd("mediathumb", [file, to_string(duration / 2), preview])
 
     preview
   end
@@ -113,7 +85,7 @@ defmodule Philomena.Processors.Gif do
 
     scale_filter = "scale=w=#{width}:h=#{height}:force_original_aspect_ratio=decrease"
     palette_filter = "paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle"
-    filter_graph = "[0:v] #{scale_filter} [x]; [x][1:v] #{palette_filter}"
+    filter_graph = "[0:v]#{scale_filter}[x];[x][1:v]#{palette_filter}"
 
     {_output, 0} =
       System.cmd(ffmpeg_path(), [

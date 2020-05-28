@@ -8,21 +8,29 @@ defmodule Philomena.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      # Connect to cluster nodes
+      {Cluster.Supervisor, [[philomena: [strategy: Cluster.Strategy.ErlangHosts]]]},
+
+      # Session storage
+      Philomena.MnesiaClusterSupervisor,
+
       # Start the Ecto repository
       Philomena.Repo,
 
+      # Background queueing system
+      Philomena.ExqSupervisor,
+
       # Starts a worker by calling: Philomena.Worker.start_link(arg)
       # {Philomena.Worker, arg},
-      Philomena.Servers.ImageProcessor,
       Philomena.Servers.UserLinkUpdater,
       Philomena.Servers.PicartoChannelUpdater,
       Philomena.Servers.PiczelChannelUpdater,
       Philomena.Servers.Config,
-      {Pow.Store.Backend.MnesiaCache, extra_db_nodes: Node.list()},
       {Redix, name: :redix, host: Application.get_env(:philomena, :redis_host)},
       {Phoenix.PubSub, [name: Philomena.PubSub, adapter: Phoenix.PubSub.PG2]},
 
       # Start the endpoint when the application starts
+      PhilomenaWeb.AdvertUpdater,
       PhilomenaWeb.StatsUpdater,
       PhilomenaWeb.UserFingerprintUpdater,
       PhilomenaWeb.UserIpUpdater,

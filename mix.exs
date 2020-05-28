@@ -66,8 +66,10 @@ defmodule Philomena.MixProject do
       {:ranch_connection_drainer, "~> 0.1"},
       {:tesla, "~> 1.3"},
       {:castore, "~> 0.1"},
-      {:mint, "~> 1.0"},
-      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
+      {:mint, "~> 1.1"},
+      {:libcluster, "~> 3.2"},
+      {:exq, "~> 0.13"},
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false}
     ]
   end
 
