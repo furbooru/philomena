@@ -26,6 +26,4 @@ defmodule Philomena.Analyzers.Webm do
         %{dimensions: {0, 0}, duration: 0.0}
     end
   end
-
-  defp ffprobe_path, do: Application.get_env(:philomena, :ffprobe_path)
 end

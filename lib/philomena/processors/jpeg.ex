@@ -68,7 +68,7 @@ defmodule Philomena.Processors.Jpeg do
     scale_filter = "scale=w=#{width}:h=#{height}:force_original_aspect_ratio=decrease"
 
     {_output, 0} =
-      System.cmd(Application.get_env(:philomena, :ffmpeg_path), [
+      System.cmd("ffmpeg", [
         "-loglevel",
         "0",
         "-y",

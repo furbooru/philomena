@@ -56,7 +56,7 @@ defmodule Philomena.Processors.Png do
       "scale=w=#{width}:h=#{height}:force_original_aspect_ratio=decrease,format=rgb32"
 
     {_output, 0} =
-      System.cmd(Application.get_env(:philomena, :ffmpeg_path), [
+      System.cmd("ffmpeg", [
         "-loglevel",
         "0",
         "-y",
