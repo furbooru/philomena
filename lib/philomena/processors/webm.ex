@@ -76,7 +76,7 @@ defmodule Philomena.Processors.Webm do
     scale_filter = "scale=w=#{width}:h=#{height}"
 
     {_output, 0} =
-      System.cmd(ffmpeg_path(), [
+      System.cmd("ffmpeg", [
         "-loglevel",
         "0",
         "-y",
@@ -106,7 +106,7 @@ defmodule Philomena.Processors.Webm do
       ])
 
     {_output, 0} =
-      System.cmd(ffmpeg_path(), [
+      System.cmd("ffmpeg", [
         "-loglevel",
         "0",
         "-y",
@@ -144,7 +144,7 @@ defmodule Philomena.Processors.Webm do
     filter_graph = "[0:v]#{scale_filter},#{rate_filter}[x];[x][1:v]#{palette_filter}"
 
     {_output, 0} =
-      System.cmd(ffmpeg_path(), [
+      System.cmd("ffmpeg", [
         "-loglevel",
         "0",
         "-y",
@@ -166,7 +166,7 @@ defmodule Philomena.Processors.Webm do
     palette = Briefly.create!(extname: ".png")
 
     {_output, 0} =
-      System.cmd(ffmpeg_path(), [
+      System.cmd("ffmpeg", [
         "-loglevel",
         "0",
         "-y",
