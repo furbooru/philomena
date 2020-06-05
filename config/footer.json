@@ -11,13 +11,13 @@
       "bold": true
     },
     {
-      "title": "Privacy Policy",
-      "url": "/pages/privacy",
+      "title": "Tag Guidelines",
+      "url": "/pages/tags",
       "bold": true
     },
     {
-      "title": "Tag Guidelines",
-      "url": "/pages/tags",
+      "title": "Privacy Policy",
+      "url": "/pages/privacy",
       "bold": true
     },
     {
@@ -55,7 +55,11 @@
     {
       "title": "Advertising",
       "url": "/pages/advertising"
-    }
+    },
+    {
+      "title": "About",
+      "url": "/pages/about"
+    },
   ],
   "Community": [
     {
@@ -77,8 +81,8 @@
       "url": "/pages/stats"
     },
     {
-      "title": "About",
-      "url": "/pages/about"
+      "title": "Discord Server",
+      "url": "/pages/discord"
     },
     {
       "title": "Twitter",
