@@ -21,12 +21,6 @@
       "grimdark",
       "grotesque"
     ],
-    "Sexual Orientations": [
-      "male x female",
-      "male x male",
-      "female x female",
-      "bisexual"
-    ],
     "Genders": [
       "male",
       "female",
@@ -45,6 +39,13 @@
       "solo male",
       "oc",
       "Tag original characters oc:name"
+    ],
+    "Common Appearances": [
+      "anthro",
+      "feral",
+      "human",
+      "humanoid",
+      "semi-anthro"
     ]
   },
   "Species": {
@@ -79,18 +80,33 @@
     ]
   },
   "Franchises": {
-    "Popular": {
-      "pokemon": "pokémon",
-      "mlp": "my little pony",
-      "nintendo": "nintendo",
-      "disney": "disney",
-      "tlk": "the lion king",
-      "zoo": "zootopia",
-      "bambi": "bambi (film)",
-      "avatar": "avatar the last airbender",
-      "sw": "star wars",
-      "sf": "star fox"
-    }
+    "Popular": [
+      "pokémon",
+      "my little pony",
+      "nintendo",
+      "disney",
+      "the lion king",
+      "zootopia",
+      "beastars",
+      "avatar the last airbender",
+      "star wars",
+      "star fox"
+    ]
+  },
+  "Sexual Orientations & co.": {
+    "Sexual Orientations": [
+      "male x female",
+      "male x male",
+      "female x female",
+      "bisexual"
+    ],
+    "Sexual Interactions": [
+      "anthro on feral",
+      "anthro on anthro",
+      "feral on feral",
+      "human on anthro",
+      "human on feral"
+    ]
   },
   "Misc.": {
     "Often Forgotten": [
@@ -110,6 +126,7 @@
     "Backgrounds": [
       "simple background",
       "abstract background",
+      "gradient background",
       "scenery porn",
       "transparent background",
       "white background",
@@ -128,7 +145,10 @@
       "green eyes",
       "cyan eyes",
       "magenta eyes",
-      "yellow eyes"
+      "yellow eyes",
+      "amber eyes",
+      "colored pupils",
+      "no pupils"
     ],
     "Character Descriptions": [
       "solo",
@@ -146,7 +166,10 @@
       "breasts",
       "clitoris",
       "erection",
-      "vaginal secretions"
+      "vaginal secretions",
+      "knot",
+      "balls",
+      "taint"
     ],
     "Fluff": [
       "fluffy",
@@ -157,8 +180,18 @@
       "head fluff",
       "neck fluff"
     ],
+    "Limb Types": [
+      "paws",
+      "hooves",
+      "paw pads",
+      "cloven hooves",
+      "claws",
+      "talons",
+      "antlers"
+    ],
     "Other": [
       "speech bubble",
+      "dialogue",
       "text",
       "wings",
       "horn",
