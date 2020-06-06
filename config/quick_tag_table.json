@@ -8,7 +8,7 @@
   "tab_modes": {
     "Main": "default",
     "Species": "default",
-    "Franchises": "shorthand",
+    "Franchises": "default",
     "Misc.": "default"
   },
   "Main": {
