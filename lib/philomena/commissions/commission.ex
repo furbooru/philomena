@@ -53,12 +53,10 @@ defmodule Philomena.Commissions.Commission do
   def categories do
     [
       Anthro: "Anthro",
-      "Canon Characters": "Canon Characters",
       Comics: "Comics",
       "Fetish Art": "Fetish Art",
-      "Human and EqG": "Human and EqG",
       NSFW: "NSFW",
-      "Original Characters": "Original Characters",
+      "Franchise Fan Art": "Franchise Fan Art",
       "Original Species": "Original Species",
       Requests: "Requests",
       Safe: "Safe",
