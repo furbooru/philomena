@@ -36,6 +36,7 @@ config :philomena,
   proxy_host: System.get_env("PROXY_HOST"),
   camo_host: System.get_env("CAMO_HOST"),
   camo_key: System.get_env("CAMO_KEY"),
+  min_number_of_tags: 5,
   cdn_host: System.get_env("CDN_HOST")
 
 config :philomena, Philomena.Repo,
