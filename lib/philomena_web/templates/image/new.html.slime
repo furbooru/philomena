@@ -65,7 +65,7 @@
           ' Tags are separated by commas, and may have spaces in them (e.g. use "solo female" instead of "solo_female").
       p
         label for="image[tag_input]"
-          strong> Sexual rating tags may be different from what you are used to!
+          strong> Sexual rating tags are different from what you are used to!
           ' Please check
           strong
             a<> href="/pages/tags"
