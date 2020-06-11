@@ -12,12 +12,12 @@
         = hidden_input f, :old_tag_input, value: @image.tag_list_cache
 
         .field
-          = label f, :tag_input do
-            ' Separate tags with commas. Use 'artist:name' tags to identify artists. Got questions? Check the
-            a> href="/pages/tags" tag guidelines
-            ' or the
-            a href="/pages/spoilers" spoiler guidelines
-            ' .
+          .block.block--fixed.block--warning
+            = label f, :tag_input do
+              ' Separate tags with commas. Use 'artist:name' tags to identify artists. Got questions? Check the
+              strong
+                a href="/pages/tags" tag guidelines
+              ' .
 
           = render PhilomenaWeb.TagView, "_tag_editor.html", f: f, name: :tag_input, type: :edit, extra: [value: Enum.map_join(display_order(@image.tags), ", ", & &1.name)]
           = error_tag f, :tag_input

@@ -51,10 +51,26 @@
     = url_input f, :source_url, class: "input input--wide js-image-input", placeholder: "Source URL"
   
   .field
-    label for="image[tag_input]"
-      ' Describe with
-      strong> 3+
-      ' tags, including ratings and applicable artist tags
+    .block.block--fixed.block--warning
+      h3 Important info about our tagging
+      p
+        label for="image[tag_input]"
+          ' Describe with
+          strong>
+            => Application.get_env(:philomena, :min_number_of_tags)
+            ' or more
+          ' tags, including ratings and applicable artist tags.
+      p
+        label for="image[tag_input]"
+          ' Tags are separated by commas, and may have spaces in them (e.g. "solo_female" would be tagged as "solo female").
+      p
+        label for="image[tag_input]"
+          strong> Sexual rating tags may be different from what you are used to!
+          ' Please check
+          strong
+            a<> href="/pages/tags"
+              ' our tagging guidelines
+          ' before posting your upload, and pick an appropriate rating tag.
 
     = render PhilomenaWeb.TagView, "_tag_editor.html", f: f, name: :tag_input, type: :upload
     = error_tag f, :tag_input

@@ -29,6 +29,7 @@ config :philomena,
   tag_file_root: "priv/static/system/images",
   cdn_host: "",
   proxy_host: nil,
+  min_number_of_tags: 5,
   app_dir: File.cwd!()
 
 config :philomena, :pow,
