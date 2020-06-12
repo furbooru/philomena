@@ -11,7 +11,7 @@ const endpoints = {
 };
 
 const spoilerDownvoteMsg =
-  'Neigh! - Remove spoilered tags from your filters to downvote from thumbnails';
+  'Please remove spoilered tags from your filters to downvote from thumbnails';
 
 /* Quick helper function to less verbosely iterate a QSA */
 function onImage(id, selector, cb) {
