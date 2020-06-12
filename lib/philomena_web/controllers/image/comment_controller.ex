@@ -16,7 +16,12 @@ defmodule PhilomenaWeb.Image.CommentController do
     edit: :create_comment,
     update: :create_comment
 
-  plug :load_and_authorize_resource, model: Image, id_name: "image_id", persisted: true, preload: [:tags]
+  plug :load_and_authorize_resource,
+    model: Image,
+    id_name: "image_id",
+    persisted: true,
+    preload: [:tags]
+
   plug :verify_authorized when action in [:show]
   plug PhilomenaWeb.FilterForcedUsersPlug when action in [:create, :edit, :update]
 
@@ -63,6 +68,12 @@ defmodule PhilomenaWeb.Image.CommentController do
 
     case Comments.create_comment(image, attributes, comment_params) do
       {:ok, %{comment: comment}} ->
+        PhilomenaWeb.Endpoint.broadcast!(
+          "firehose",
+          "comment:create",
+          PhilomenaWeb.Api.Json.CommentView.render("show.json", %{comment: comment})
+        )
+
         Comments.notify_comment(comment)
         Comments.reindex_comment(comment)
         Images.reindex_image(conn.assigns.image)
