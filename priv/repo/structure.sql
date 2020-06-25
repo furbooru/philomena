@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg90+1)
+-- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg100+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -3888,6 +3888,20 @@ CREATE INDEX index_vpns_on_ip ON public.vpns USING gist (ip inet_ops);
 --
 
 CREATE INDEX intensities_index ON public.images USING btree (se_intensity, sw_intensity, ne_intensity, nw_intensity, average_intensity);
+
+
+--
+-- Name: unique_users_name_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX unique_users_name_index ON public.users USING btree (name);
+
+
+--
+-- Name: unique_users_slug_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX unique_users_slug_index ON public.users USING btree (slug);
 
 
 --
