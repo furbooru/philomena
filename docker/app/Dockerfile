@@ -6,6 +6,7 @@ RUN apt-get update \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" >> /etc/apt/sources.list \
     && wget -qO - "https://www.postgresql.org/media/keys/ACCC4CF8.asc" | apt-key add - \
     && wget -qO - "https://deb.nodesource.com/gpgkey/nodesource.gpg.key" | apt-key add - \
+    && curl https://sh.rustup.rs -sSf | sh -s -- -y \
     && apt-get update \
     && apt-get -qq -y install inotify-tools postgresql-client build-essential git ffmpeg libavformat-dev libavcodec-dev libswscale-dev nodejs libmagic-dev libpng-dev gifsicle optipng libjpeg-progs librsvg2-bin \
     && mix local.hex --force \
@@ -23,4 +24,5 @@ RUN git clone https://github.com/derpibooru/mediatools /tmp/mediatools \
 
 COPY docker/app/run-development /usr/local/bin/run-development
 COPY docker/app/safe-rsvg-convert /usr/local/bin/safe-rsvg-convert
+ENV PATH=$PATH:/root/.cargo/bin
 CMD run-development
