@@ -1,4 +1,5 @@
 use rustler::{Encoder, Env, Error, Term};
+use comrak::{markdown_to_html, ComrakOptions};
 
 mod atoms {
     use rustler::rustler_atoms;
@@ -18,19 +19,29 @@ rustler::rustler_export_nifs! {
 
 fn to_html_simple<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
   let text: String = args[0].decode()?;
+  let mut options = ComrakOptions::default();
+  options.ext_autolink = true;
+  options.ext_table = true;
+  options.ext_description_lists = true;
+  let result = markdown_to_html(&text, &options);
 
-  Ok((atoms::ok(), text).encode(env))
+  Ok((atoms::ok(), result).encode(env))
 }
 
 fn to_html_raw<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
   let text: String = args[0].decode()?;
   let raw: bool = args[1].decode()?;
 
-  if raw {
-    let message = format!("oh no you enabled raw mode: {}", text);
-    Ok((atoms::ok(), message).encode(env))
+  let mut options = ComrakOptions::default();
+  options.ext_autolink = true;
+  options.ext_table = true;
+  options.ext_description_lists = true;
 
-  } else {
-    Ok((atoms::ok(), text).encode(env))
+  if raw {
+    options.unsafe_ = true;
   }
+
+  let result = markdown_to_html(&text, &options);
+
+  Ok((atoms::ok(), result).encode(env))
 }
