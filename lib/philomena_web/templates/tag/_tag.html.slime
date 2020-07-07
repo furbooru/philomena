@@ -12,7 +12,7 @@ span.tag.dropdown data-tag-category="#{@tag.category}" data-tag-id="#{@tag.id}" 
   span.tag__count
     = @tag.images_count
   / The order of tag states and dropdown links is important for tags.js
-  span.dropdown__content
+  div.dropdown__content
     a.tag__dropdown__link.hidden data-method="delete" data-remote="true" data-tag-action="unwatch" href=Routes.tag_watch_path(@conn, :delete, @tag) Unwatch
     a.tag__dropdown__link.hidden data-method="post" data-remote="true" data-tag-action="watch" href=Routes.tag_watch_path(@conn, :create, @tag) Watch
 
