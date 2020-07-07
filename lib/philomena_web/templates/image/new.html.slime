@@ -59,7 +59,7 @@
           strong>
             => Application.get_env(:philomena, :min_number_of_tags)
             ' or more
-          ' tags, including ratings and applicable artist tags.
+          ' tags, considering that rating, gender, species, character and applicable artist tags are specially important.
       p
         label for="image[tag_input]"
           ' Tags are separated by commas, and may have spaces in them (e.g. use "solo female" instead of "solo_female").
