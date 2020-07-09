@@ -10,6 +10,6 @@ path = "src/lib.rs"
 crate-type = ["dylib"]
 
 [dependencies]
-comrak = "0.7"
+comrak = { git = "https://github.com/furbooru/comrak" }
 lazy_static = "1.0"
 rustler = "0.21.1"

@@ -47,3 +47,7 @@ npm-debug.log
 
 # Index dumps
 *.jsonl
+
+# Nix files
+.envrc
+shell.nix
