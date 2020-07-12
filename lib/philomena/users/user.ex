@@ -153,6 +153,7 @@ defmodule Philomena.Users.User do
     |> pow_changeset(attrs)
     |> pow_extension_changeset(attrs)
     |> cast(attrs, [])
+    |> unsafe_validate_unique([:name], Repo)
     |> validate_required([])
     |> unique_constraints()
   end
