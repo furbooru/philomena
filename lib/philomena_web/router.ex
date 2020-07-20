@@ -140,7 +140,7 @@ defmodule PhilomenaWeb.Router do
 
     resources "/forums", ForumController, only: [:show, :index] do
       resources "/topics", Forum.TopicController, only: [:show, :index] do
-        resources "/posts", Forum.Topic.PostController, only: [:show, :index]
+        resources "/posts", Forum.Topic.PostController, only: [:show, :index, :create]
       end
     end
   end
