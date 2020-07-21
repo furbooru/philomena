@@ -24,7 +24,7 @@ defmodule Philomena.Scrapers.Pillowfort do
         )
 
       %{
-        source_url: "https://www.pillowfort.social/posts/#{post["id"]}",
+        source_url: post["url"],
         author_name: post["username"],
         description: HtmlSanitizeEx.strip_tags(post["content"]),
         images: images
