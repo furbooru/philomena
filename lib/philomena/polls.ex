@@ -102,6 +102,8 @@ defmodule Philomena.Polls do
     Poll.changeset(poll, %{})
   end
 
+  def active?(nil), do: false
+
   def active?(%{id: poll_id}) do
     now = DateTime.utc_now()
 
