@@ -9,7 +9,7 @@ defmodule PhilomenaWeb.Image.SourceController do
   import Ecto.Query
 
   plug PhilomenaWeb.LimitPlug,
-       [time: 5, error: "You may only update metadata once every 5 seconds."]
+       [time: 1, error: "You may only update metadata once every 1 second."]
        when action in [:update]
 
   plug PhilomenaWeb.FilterBannedUsersPlug
