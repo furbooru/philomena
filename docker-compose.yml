@@ -51,6 +51,9 @@ services:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
+    environment:
+      - RUST_LOG=trace
+    restart: always
     volumes:
       - .:/srv/philomena
     logging:
