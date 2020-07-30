@@ -32,17 +32,6 @@ config :philomena,
   min_number_of_tags: 5,
   app_dir: File.cwd!()
 
-config :philomena, :pow,
-  user: Philomena.Users.User,
-  repo: Philomena.Repo,
-  web_module: PhilomenaWeb,
-  users_context: Philomena.Users,
-  extensions: [PowResetPassword, PowLockout, PowCaptcha, PowPersistentSession],
-  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
-  mailer_backend: PhilomenaWeb.PowMailer,
-  captcha_verifier: Philomena.Captcha,
-  cache_store_backend: Pow.Store.Backend.MnesiaCache
-
 config :exq,
   queues: [{"videos", 2}, {"images", 4}, {"indexing", 16}],
   scheduler_enable: true,
