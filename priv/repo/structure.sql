@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg100+1)
+-- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg90+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1974,7 +1974,8 @@ CREATE TABLE public.users (
     otp_backup_codes character varying[],
     last_renamed_at timestamp without time zone DEFAULT '1970-01-01 00:00:00'::timestamp without time zone NOT NULL,
     forced_filter_id bigint,
-    confirmed_at timestamp(0) without time zone
+    confirmed_at timestamp(0) without time zone,
+    senior_staff boolean DEFAULT false
 );
 
 
@@ -4808,3 +4809,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20200617111116);
 INSERT INTO public."schema_migrations" (version) VALUES (20200617113333);
 INSERT INTO public."schema_migrations" (version) VALUES (20200706171350);
 INSERT INTO public."schema_migrations" (version) VALUES (20200725234412);
+INSERT INTO public."schema_migrations" (version) VALUES (20200817213256);
