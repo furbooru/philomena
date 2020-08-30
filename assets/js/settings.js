@@ -15,8 +15,11 @@ export function setupSettings() {
 
   // Local settings
   localCheckboxes.forEach(checkbox => {
+    const storeKey = checkbox.id.replace('user_', '');
+    checkbox.checked = store.get(storeKey);
+
     checkbox.addEventListener('change', () => {
-      store.set(checkbox.id.replace('user_', ''), checkbox.checked);
+      store.set(storeKey, checkbox.checked);
     });
   });
 
