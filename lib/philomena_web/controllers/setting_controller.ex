@@ -42,6 +42,7 @@ defmodule PhilomenaWeb.SettingController do
     |> set_cookie(user_params, "chan_nsfw", "chan_nsfw")
     |> set_cookie(user_params, "hide_staff_tools", "hide_staff_tools")
     |> set_cookie(user_params, "hide_uploader", "hide_uploader")
+    |> set_cookie(user_params, "extended_search_ac", "extended_search_ac")
   end
 
   defp set_cookie(conn, params, param_name, cookie_name) do

@@ -118,6 +118,16 @@ h1 Content Settings
         => label f, :chan_nsfw, "Show NSFW channels"
         => checkbox f, :chan_nsfw, checked: @conn.cookies["chan_nsfw"] == "true"
         .fieldlabel: i Show streams marked as NSFW on the channels page.
+      .field
+        => label f, :extended_search_ac, "Autocomplete search fields using extended syntax"
+        => checkbox f, :extended_search_ac, checked: @conn.cookies["chan_nsfw"] == "true"
+        .fieldlabel
+          i
+            | By default the search fields on the site autocomplete the same syntax as the tag input, but you can chose to enable the
+            a<> href="/tags"
+              | Tags
+            | page syntax instead, letting you use wildcards for example. Does not change the behavior of search itself, only the suggestions.
+
       = if staff?(@conn.assigns.current_user) do
         .field
           => label f, :hide_staff_tools

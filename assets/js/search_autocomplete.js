@@ -1,5 +1,6 @@
 import { $$ } from './utils/dom.js';
 import { handleAutocomplete, setAutocompleteTerm, setTermPosition } from './autocomplete.js';
+import store from './utils/store.js';
 
 const LITERAL_FIELDS = [
   'id',
@@ -34,11 +35,7 @@ const ignoredTerms = [
  * @returns {boolean}
  */
 function isIgnoredTerm(value) {
-  return ignoredTerms.some(regex => {
-    const matches = regex.test(value);
-    console.log('%s %s for regex %s', value, matches ? 'matches' : 'does not match', regex);
-    return matches;
-  });
+  return ignoredTerms.some(regex => regex.test(value));
 }
 
 /**
@@ -113,7 +110,6 @@ function extractTerm(input, cursorPos) {
 
       parenBalance[depth] = Math.max(0, parenBalance[depth] - 1);
 
-      console.log(parenBalance[depth]);
       if (parenBalance[depth] <= 0) {
         if (parenBalance[depth] === 0) {
           depth = Math.max(0, depth - 1);
@@ -235,6 +231,12 @@ function handleInput(event) {
   }, 100);
 }
 
+function getAutocompleteSource() {
+  return store.get('extended_search_ac')
+    ? '/search/autocomplete?term='
+    : '/tags/autocomplete?term=';
+}
+
 function setupSearchAutocomplete() {
   const fields = $$('.js-search-field');
 
@@ -242,7 +244,7 @@ function setupSearchAutocomplete() {
     field.setAttribute('autocomplete', 'off');
     field.setAttribute('autocapitalize', 'none');
     field.dataset.ac = 'true';
-    field.dataset.acSource = '/search/autocomplete?term=';
+    field.dataset.acSource = getAutocompleteSource();
     field.dataset.acMinLength = '3';
 
     field.addEventListener('input', handleInput);

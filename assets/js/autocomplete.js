@@ -209,7 +209,6 @@ const handleAutocompleteInner = throttle(300, target => {
  * @param {ObjectWithTarget} event
  */
 function handleAutocomplete(event) {
-  console.log('handleAutocomplete');
   removeParent();
 
   handleAutocompleteInner(event.target);
