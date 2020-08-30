@@ -157,7 +157,7 @@ function getTermPosition(input) {
  * @param {HTMLInputElement} input
  * @param {string} [term] term to force, pass undefined or omit to clear
  */
-function setAutocompleteTerm(input, term) {
+function setAutocompleteTerm(input, term = '') {
   input.dataset.acTerm = term;
 }
 
@@ -170,9 +170,12 @@ function setAutocompleteTerm(input, term) {
  */
 function postprocessTerm(term) {
   let processedTerm = term;
+  // Replaces underscores with spaces where applicable
   if (!termsAllowingUnderscores.test(term)) {
     processedTerm = processedTerm.replace(/_/g, ' ');
   }
+  // Remove spaces before/after namespace
+  processedTerm = processedTerm.replace(/^([^:\s]+)\s*:\s*(.*)$/g, '$1:$2');
   return processedTerm;
 }
 

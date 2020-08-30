@@ -20,22 +20,32 @@ const LITERAL_FIELDS = [
   'duration',
   'created_at',
   'updated_at',
-  'first_seen_at'
+  'first_seen_at',
+  'faved_by',
+  'orig_sha512_hash',
+  'sha512_hash',
+  'uploader',
+  'source_url',
+  'original_format',
+  'mime_type',
+  'description',
+  'gallery_id',
+  'favourited_by_users',
+  'favourited_by_user_ids',
 ];
 
 /**
- * @type {RegExp[]}
+ * A regular expression that matches any terms that should not be autocompleted
  */
-const ignoredTerms = [
-  new RegExp(`^(?:${LITERAL_FIELDS.join('|')})(?:\\.[^:]*)?:`),
-];
+const ignoredTermRegex = new RegExp(`^(?:${LITERAL_FIELDS.join('|')})(?:\\.[gl]te|:)`);
 
 /**
- * @param {string} value
+ * Checks if autocompletion should ignore the specified term
+ * @param {string} term
  * @returns {boolean}
  */
-function isIgnoredTerm(value) {
-  return ignoredTerms.some(regex => regex.test(value));
+function isIgnoredTerm(term) {
+  return ignoredTermRegex.test(term);
 }
 
 /**
@@ -54,7 +64,7 @@ function isIgnoredTerm(value) {
  */
 
 /**
- * Extract the search term form an input string and the cursor position
+ * Extract the current search term form an input string based on the cursor position
  * @param {string} input
  * @param {number} cursorPos
  * @return {ParserToken}
