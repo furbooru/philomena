@@ -455,6 +455,7 @@ defmodule PhilomenaWeb.Router do
     end
 
     scope "/search", Search, as: :search do
+      resources "/autocomplete", AutocompleteController, only: [:show], singleton: true
       resources "/reverse", ReverseController, only: [:index, :create]
     end
 

@@ -22,3 +22,35 @@ export function delegate(node, event, selectors) {
     }
   });
 }
+
+/**
+ * @param fn
+ * @param delay
+ * @return {function}
+ * @returns A function that will not execute `fn` until it hasn't been called for `delay` ms
+ */
+export function throttle(delay, fn) {
+  let timeout;
+  return (...args) => {
+    window.clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
+}
+
+/**
+ * @param fn
+ * @param delay
+ * @return {function}
+ * @returns A function that will only execute `fn` at most once every `delay` ms
+ */
+export function debounce(delay, fn) {
+  let timeout = null;
+  return (...args) => {
+    if (timeout !== null) return;
+    timeout = setTimeout(() => {
+      fn(...args);
+      window.clearTimeout(timeout);
+      timeout = null;
+    }, delay);
+  };
+}
