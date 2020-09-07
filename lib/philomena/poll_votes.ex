@@ -45,12 +45,14 @@ defmodule Philomena.PollVotes do
     poll_votes = filter_options(user, poll, now, attrs)
 
     Multi.new()
-    |> Multi.run(:ended, fn _repo, _changes ->
-      # Bail if poll is no longer active
-      case Polls.active?(poll) do
-        false -> {:error, []}
-        _true -> {:ok, []}
-      end
+    |> Multi.run(:lock, fn repo, _ ->
+      poll =
+        Poll
+        |> where(id: ^poll.id)
+        |> lock("FOR UPDATE")
+        |> repo.one()
+
+      {:ok, poll}
     end)
     |> Multi.run(:existing_votes, fn _repo, _changes ->
       # Don't proceed if any votes exist
@@ -84,7 +86,7 @@ defmodule Philomena.PollVotes do
 
       {:ok, count}
     end)
-    |> Repo.isolated_transaction(:serializable)
+    |> Repo.transaction()
   end
 
   defp filter_options(user, poll, now, %{"option_ids" => options}) when is_list(options) do

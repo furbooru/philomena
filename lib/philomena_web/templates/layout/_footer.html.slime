@@ -15,11 +15,8 @@ footer#footer
           br
 
   #serving_info
-    ' Powered by the 
-    a href="https://github.com/furbooru/philomena" philomena project (fork)
-    br
-    ' Served by
-    => hostname()
+    ' Powered by
+    a> href="https://github.com/furbooru/philomena" philomena (furbooru fork)
     | (
     = render_time(@conn)
     | ms)
