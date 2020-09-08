@@ -119,8 +119,12 @@ h1 Content Settings
         => checkbox f, :chan_nsfw, checked: @conn.cookies["chan_nsfw"] == "true"
         .fieldlabel: i Show streams marked as NSFW on the channels page.
       .field
+        => label f, :disable_search_ac, "Disable tag autocompletion on search inputs"
+        => checkbox f, :disable_search_ac, checked: @conn.cookies["disable_search_ac"] == "true"
+        .fieldlabel: i By default the various image search inputs across the site will give you tag suggestions as you type. You can disable this here to revert to the previous behavior.
+      .field
         => label f, :extended_search_ac, "Autocomplete search fields using extended syntax"
-        => checkbox f, :extended_search_ac, checked: @conn.cookies["chan_nsfw"] == "true"
+        => checkbox f, :extended_search_ac, checked: @conn.cookies["extended_search_ac"] == "true"
         .fieldlabel
           i
             | By default the search fields on the site autocomplete the same syntax as the tag input, but you can chose to enable the

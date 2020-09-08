@@ -248,6 +248,8 @@ function getAutocompleteSource() {
 }
 
 function setupSearchAutocomplete() {
+  if (store.get('disable_search_ac')) return;
+
   const fields = $$('.js-search-field');
 
   fields.forEach(field => {
