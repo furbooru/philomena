@@ -9,10 +9,10 @@ span.tag.dropdown data-tag-category="#{@tag.category}" data-tag-id="#{@tag.id}" 
     span.tag__state.hidden title="Hidden"
       | H
 
-    a.tag__name< href=Routes.tag_path(@conn, :show, @tag) title="#{@tag.short_description}" = @tag.name
-    span.tag__count
-      = @tag.images_count
-    / The order of tag states and dropdown links is important for tags.js
+  a.tag__name< href=Routes.tag_path(@conn, :show, @tag) title="#{@tag.short_description}" = @tag.name
+  span.tag__count
+    = @tag.images_count
+  / The order of tag states and dropdown links is important for tags.js
 
   div.dropdown__content
     a.tag__dropdown__link.hidden data-method="delete" data-remote="true" data-tag-action="unwatch" href=Routes.tag_watch_path(@conn, :delete, @tag) Unwatch
