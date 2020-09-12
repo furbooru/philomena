@@ -165,6 +165,13 @@
       background-color: $tag_category_species_border;
     }
   }
+  &[data-tag-category="body-type"] {
+    background: $tag_category_body_type_background;
+    color: $tag_category_body_type_color;
+    .tag__count {
+      background-color: $tag_category_body_type_border;
+    }
+  }
 }
 
 // Quick Tag Table
