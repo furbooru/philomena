@@ -18,7 +18,7 @@ defmodule PhilomenaWeb.ReportView do
       "Rule #2: Bad tagging/sourcing": "Rule #2",
       "Rule #3: Image not furry-related / not fandom-related": "Rule #3",
       "Rule #4: Whining about filterable content": "Rule #4",
-      "Rule #5: Underage porn": "Rule #5",
+      "Rule #5: Illegal or forbidden content": "Rule #5",
       "Rule #6: Spam, off-topic, or general site abuse": "Rule #6",
       "Rule #7: Above topic rating (NOT swear words)": "Rule #7",
       "Rule #8: Privacy violation": "Rule #8",
