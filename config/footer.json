@@ -35,6 +35,11 @@
   ],
   "Help & Information": [
     {
+      "title": "Getting Started",
+      "url": "/pages/start",
+      "bold": true
+    },
+    {
       "title": "Changelog",
       "url": "https://github.com/furbooru/philomena/commits/master",
       "bold": true
