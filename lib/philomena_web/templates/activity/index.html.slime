@@ -38,6 +38,8 @@
         ' Most Commented-on Images
 
   .column-layout__main
+    = if is_nil(@conn.assigns.current_user) do
+      = render PhilomenaWeb.ActivityView, "_getting_started.html", conn: @conn
     = render PhilomenaWeb.ImageView, "index.html", conn: @conn, images: @images, size: :thumb
     = if not is_nil(@watched) and Enum.any?(@watched) do
       .block

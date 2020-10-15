@@ -1,0 +1,30 @@
+.block.block--fixed.block--success
+  h3 Welcome to Furbooru
+  p
+    ' If you are familiar with other image hosting sites, this site may work a little differently from what you're used to.
+  p
+    ' We recommend checking out our
+    strong
+      a href="/pages/start"
+        ' Getting Started Guide
+    ' to learn how to use the site. Also be sure to check out the
+    strong
+      a href="/pages/rules"
+        ' Site Rules
+    ' and
+    strong
+      a href="/pages/tagging"
+        | Tagging Guidelines
+    ' . If you are of legal age and would like to view adult content, you can switch to the 
+    strong
+      a href="/filters/62"
+        ' Default 18+ Filter
+    ' or the
+    strong
+      a href="/filters/2"
+        | Everything Filter
+    ' . Alternatively you can visit the 
+    strong
+      a href="/filters"
+        ' Filters Page
+    ' to personalize your content settings. Have fun!
