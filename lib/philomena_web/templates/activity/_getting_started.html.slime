@@ -1,7 +1,7 @@
 .block.block--fixed.block--success
   h3 Welcome to Furbooru
   p
-    ' We recommend checking out our
+    ' Check out our
     strong
       a href="/pages/start"
         ' Getting Started Guide
@@ -13,7 +13,9 @@
     strong
       a href="/pages/tagging"
         | Tagging Guidelines
-    ' . If you are of legal age and would like to view adult content, you can switch to the 
+    | .
+  p
+    ' If you are of legal age and would like to view adult content, you can switch to the
     strong
       a href="/filters/62"
         | 18+ Filter
