@@ -11,7 +11,7 @@
         ' Site Rules
     ' and
     strong
-      a href="/pages/tagging"
+      a href="/pages/tags"
         | Tagging Guidelines
     | .
   p
