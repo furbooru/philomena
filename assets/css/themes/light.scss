@@ -26,6 +26,7 @@ $vote_down_color: #cf0001;
 $hide_color: #cf0001;
 
 $destroyed_content_color: #ffdcdc;
+$destroyed_content_color_odd: saturate(darken($destroyed_content_color, 5%), 10%);
 
 $assistant_color: #eeceed;
 

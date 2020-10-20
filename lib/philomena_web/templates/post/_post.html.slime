@@ -1,11 +1,23 @@
 article.block.communication id="post_#{@post.id}"
   .block__content.flex.flex--no-wrap class=communication_body_class(@post)
     .flex__fixed.spacing-right
-      = render PhilomenaWeb.UserAttributionView, "_anon_user_avatar.html", object: @post, conn: @conn
-    .flex__grow.communication__body
-      span.communication__body__sender-name = render PhilomenaWeb.UserAttributionView, "_anon_user.html", object: @post, awards: true, conn: @conn
-      br
-      = render PhilomenaWeb.UserAttributionView, "_anon_user_title.html", object: @post, conn: @conn
+      = unless @post.hidden_from_users do
+        = render PhilomenaWeb.UserAttributionView, "_anon_user_avatar.html", object: @post, conn: @conn
+      - else
+        .deleted_content_avatar_spacer
+          = unless can?(@conn, :hide, @post) do
+            .block__content.communication__options
+              ' Posted
+              => pretty_time(@post.created_at)
+              br
+              a.communication__interaction title="Link to post" href=(Routes.forum_topic_path(@conn, :show, @post.topic.forum, @post.topic, post_id: @post.id) <> "#post_#{@post.id}")
+                i.fa.fa-link>
+                ' Link
+    .flex__grow.communication__body class=communication_content_class(@post)
+      span.communication__body__sender-name = render PhilomenaWeb.UserAttributionView, "_anon_user.html", object: @post, awards: not @post.hidden_from_users, conn: @conn
+      = unless @post.hidden_from_users do
+        br
+        = render PhilomenaWeb.UserAttributionView, "_anon_user_title.html", object: @post, conn: @conn
       .communication__body__text
         = if @post.hidden_from_users do
           strong.comment_deleted
@@ -28,34 +40,35 @@ article.block.communication id="post_#{@post.id}"
         - else
           ==<> @body
 
-  .block__content.communication__options
-    .flex.flex--wrap.flex--spaced-out
-      = render PhilomenaWeb.PostView, "_post_options.html", conn: @conn, post: @post
+  = if not @post.hidden_from_users or can?(@conn, :hide, @post) do
+    .block__content.communication__options
+      .flex.flex--wrap.flex--spaced-out
+        = render PhilomenaWeb.PostView, "_post_options.html", conn: @conn, post: @post
 
-    = if can?(@conn, :hide, @post) and not hide_staff_tools?(@conn) do
-      = cond do
-        - @post.hidden_from_users and not @post.destroyed_content ->
-          = link(to: Routes.forum_topic_post_hide_path(@conn, :delete, @post.topic.forum, @post.topic, @post), data: [confirm: "Are you sure?"], method: "delete", class: "communication__interaction") do
-            i.fas.fa-check>
-            ' Restore
-            = if can?(@conn, :delete, @post) do
-              = link(to: Routes.forum_topic_post_delete_path(@conn, :create, @post.topic.forum, @post.topic, @post), data: [confirm: "Are you sure?"], method: "post", class: "communication__interaction") do
-                i.fas.fa-times>
-                ' Delete Contents
+      = if can?(@conn, :hide, @post) and not hide_staff_tools?(@conn) do
+        = cond do
+          - @post.hidden_from_users and not @post.destroyed_content ->
+            = link(to: Routes.forum_topic_post_hide_path(@conn, :delete, @post.topic.forum, @post.topic, @post), data: [confirm: "Are you sure?"], method: "delete", class: "communication__interaction") do
+              i.fas.fa-check>
+              ' Restore
+              = if can?(@conn, :delete, @post) do
+                = link(to: Routes.forum_topic_post_delete_path(@conn, :create, @post.topic.forum, @post.topic, @post), data: [confirm: "Are you sure?"], method: "post", class: "communication__interaction") do
+                  i.fas.fa-times>
+                  ' Delete Contents
 
-        - not @post.hidden_from_users and not @post.destroyed_content ->
-          a.communication__interaction.togglable-delete-form-link href="#" data-click-toggle="#inline-del-form-post-#{@post.id}"
-            i.fa.fa-times>
-            ' Delete
+          - not @post.hidden_from_users and not @post.destroyed_content ->
+            a.communication__interaction.togglable-delete-form-link href="#" data-click-toggle="#inline-del-form-post-#{@post.id}"
+              i.fa.fa-times>
+              ' Delete
 
-        - true ->
+          - true ->
 
-      = if can?(@conn, :show, :ip_address) do
-        .communication__info
-          =<> link_to_ip(@conn, @post.ip)
-        .communication__info
-          =<> link_to_fingerprint(@conn, @post.fingerprint)
+        = if can?(@conn, :show, :ip_address) do
+          .communication__info
+            =<> link_to_ip(@conn, @post.ip)
+          .communication__info
+            =<> link_to_fingerprint(@conn, @post.fingerprint)
 
-      = form_for :post, Routes.forum_topic_post_hide_path(@conn, :create, @post.topic.forum, @post.topic, @post), [class: "togglable-delete-form hidden flex", id: "inline-del-form-post-#{@post.id}"], fn f ->
-        = text_input f, :deletion_reason, class: "input input--wide", placeholder: "Deletion Reason", id: "inline-del-reason-post-#{@post.id}", required: true
-        = submit "Delete", class: "button"
+        = form_for :post, Routes.forum_topic_post_hide_path(@conn, :create, @post.topic.forum, @post.topic, @post), [class: "togglable-delete-form hidden flex", id: "inline-del-form-post-#{@post.id}"], fn f ->
+          = text_input f, :deletion_reason, class: "input input--wide", placeholder: "Deletion Reason", id: "inline-del-reason-post-#{@post.id}", required: true
+          = submit "Delete", class: "button"

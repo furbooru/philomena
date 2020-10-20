@@ -17,7 +17,8 @@ $success_light_color: #0f330f;
 $danger_light_color: #66211f;
 $warning_light_color: #7d4825;
 
-$destroyed_content_color: #382c2f;
+$destroyed_content_color: #332025;
+$destroyed_content_color_odd: saturate(darken($destroyed_content_color, 5%), 10%);
 
 $meta_color: #191f2a;
 

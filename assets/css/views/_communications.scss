@@ -20,6 +20,10 @@ td.table--communication-list__options {
   overflow: hidden;
 }
 
+.communication__body--hidden {
+  padding: 6px;
+}
+
 span.communication__body__sender-name {
   font-size: 15px;
   font-weight: bold;
@@ -98,6 +102,6 @@ span.communication__sender__stats,
   margin-right: 2em;
 }
 
-.communication--destroyed {
-  background-color: $destroyed_content_color;
+.communication--hidden {
+  padding: 0 !important;
 }

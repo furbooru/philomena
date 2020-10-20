@@ -50,6 +50,20 @@
   &:nth-child(even) &:nth-child(odd) .danger {
     background: $danger_odd_color;
   }
+
+  //destroyed content bg
+  &:nth-child(odd).destroyed_content,
+  &:nth-child(odd) .destroyed_content {
+    background: $destroyed_content_color_odd;
+  }
+  &:nth-child(even).destroyed_content,
+  &:nth-child(even) .destroyed_content {
+    background: $destroyed_content_color;
+  }
+  &:nth-child(even) &:nth-child(odd).destroyed_content,
+  &:nth-child(even) &:nth-child(odd) .destroyed_content {
+    background: $destroyed_content_color_odd;
+  }
 }
 
 @mixin number-wrap($color) {
