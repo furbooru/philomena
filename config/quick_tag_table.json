@@ -107,14 +107,14 @@
     "Misc": [
       "hybrid",
       "fictional species",
-      "unknown species"
+      "ambiguous species"
     ]
   },
   "Franchises": {
     "Popular": [
       "animal crossing",
       "crash bandicoot (series)",
-      "digmon",
+      "digimon",
       "my little pony",
       "pokémon",
       "ratchet & clank",
@@ -146,8 +146,7 @@
       "intersex female/female",
       "intersex female/intersex male",
       "herm/intersex male",
-      "intersex female/intersex female",
-      "herm/maleherm"
+      "intersex female/intersex female"
     ],
     "Form/form": [
       "anthro/feral",
