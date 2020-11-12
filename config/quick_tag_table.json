@@ -3,12 +3,14 @@
     "Main",
     "Species",
     "Franchises",
+    "Sexual Interactions",
     "Misc."
   ],
   "tab_modes": {
     "Main": "default",
     "Species": "default",
     "Franchises": "default",
+    "Sexual Interactions": "default",
     "Misc.": "default"
   },
   "Main": {
@@ -23,20 +25,22 @@
     "Genders": [
       "male",
       "female",
-      "penis on female",
-      "vagina on male",
-      "transgender",
-      "mtf transgender",
-      "ftm transgender",
-      "agender",
+      "intersex male",
+      "intersex female",
+      "herm",
+      "maleherm",
       "ambiguous gender"
     ],
     "Often Forgotten": [
       "solo",
-      "female",
-      "solo female",
+      "duo",
+      "group",
       "solo male",
+      "solo female",
+      "human only",
+      "not furry",
       "oc",
+      "oc only",
       "Tag original characters oc:name"
     ],
     "Common Appearances": [
@@ -44,83 +48,208 @@
       "feral",
       "human",
       "humanoid",
-      "semi-anthro"
+      "semi-anthro",
+      "taur",
+      "digitigrade anthro",
+      "plantigrade anthro",
+      "unguligrade anthro"
     ]
   },
   "Species": {
-    "Major": [
-      "canine",
-      "deer",
-      "fox",
+    "Specific 1": [
+      "bear",
       "cat",
+      "crocodilian",
+      "deer",
       "dog",
-      "feline",
-      "bird",
-      "rabbit",
-      "vulpine",
-      "dragon",
-      "human",
-      "pony"
-    ],
-    "Minor": [
-      "hellhound",
-      "bobcat",
-      "big cat",
-      "alien",
+      "fox",
       "goat",
+      "hedgehog",
+      "horse",
+      "human"
+    ],
+    "Specific 2": [
+      "hyena",
+      "lion",
+      "lizard",
+      "otter",
+      "pony",
+      "rabbit",
+      "shark",
+      "snake",
       "tiger",
-      "crow",
-      "corvid",
-      "sphinx"
+      "wolf"
+    ],
+    "General": [
+      "arthropod",
+      "bird",
+      "big cat",
+      "canine",
+      "dinosaur",
+      "equine",
+      "feline",
+      "fish",
+      "mammal",
+      "reptile"
+    ],
+    "Fantasy": [
+      "alicorn",
+      "alien",
+      "demon",
+      "dragon",
+      "earth pony",
+      "gryphon",
+      "monster",
+      "pegasus",
+      "undead",
+      "unicorn"
     ],
     "Misc": [
-      "original species",
-      "hybrid"
+      "hybrid",
+      "fictional species",
+      "unknown species"
     ]
   },
   "Franchises": {
     "Popular": [
-      "pokémon",
+      "animal crossing",
+      "crash bandicoot (series)",
+      "digmon",
       "my little pony",
-      "nintendo",
-      "disney",
-      "the lion king",
-      "zootopia",
+      "pokémon",
+      "ratchet & clank",
+      "spyro the dragon (series)",
+      "sonic the hedgehog (series)",
+      "star fox",
+      "zootopia"
+    ],
+    "Other": [
+      "aggretsuko",
       "beastars",
-      "avatar the last airbender",
-      "star wars",
-      "star fox"
+      "lilo & stitch",
+      "mario (series)",
+      "minecraft",
+      "night in the woods",
+      "the lion king",
+      "touhou",
+      "undertale",
+      "warrior cats"
     ]
   },
-  "Sexual Orientations & co.": {
-    "Sexual Orientations": [
-      "male x female",
-      "male x male",
-      "female x female",
-      "bisexual"
+  "Sexual Interactions": {
+    "Orientations": [
+      "male/female",
+      "male/male",
+      "female/female",
+      "bisexual",
+      "male/intersex female",
+      "intersex female/female",
+      "intersex female/intersex male",
+      "herm/intersex male",
+      "intersex female/intersex female",
+      "herm/maleherm"
     ],
-    "Sexual Interactions": [
+    "Form/form": [
+      "anthro/feral",
+      "anthro/anthro",
+      "feral/feral",
+      "human/anthro",
+      "human/feral",
+      "human/human",
+      "humanoid/anthro",
+      "humanoid/feral",
+      "anthro/taur",
+      "feral/taur"
+    ],
+    "Form/form specifics": [
       "anthro on feral",
-      "anthro on anthro",
-      "feral on feral",
+      "feral on anthro",
       "human on anthro",
-      "human on feral"
+      "human on feral",
+      "anthro on human",
+      "feral on human",
+      "humanoid on anthro",
+      "humanoid on feral",
+      "anthro on humanoid",
+      "feral on humanoid"
     ]
   },
   "Misc.": {
-    "Often Forgotten": [
-      "signature",
-      "watermark",
-      "obtrusive watermark",
-      "duo",
-      "lying down",
-      "sitting",
-      "looking at you",
-      "looking at something",
-      "looking at each other",
-      "eyes closed",
-      "blushing",
-      "not furry"
+    "Features 1": [
+      "paws",
+      "feet",
+      "paw pads",
+      "hooves",
+      "cloven hooves",
+      "claws",
+      "talons",
+      "beak",
+      "antlers",
+      "wings"
+    ],
+    "Features 2": [
+      "horn",
+      "horns",
+      "fangs",
+      "teeth",
+      "whiskers",
+      "tail",
+      "multiple tails"
+    ],
+    "NSFW": [
+      "penis",
+      "vulva",
+      "breasts",
+      "nipples",
+      "vaginal secretions",
+      "cum",
+      "erection",
+      "balls",
+      "animal genitalia",
+      "sex"
+    ],
+    "Eye Colors 1": [
+      "amber eyes",
+      "black eyes",
+      "blue eyes",
+      "brown eyes",
+      "cyan eyes",
+      "gray eyes",
+      "green eyes",
+      "magenta eyes",
+      "orange eyes",
+      "pink eyes"
+    ],
+    "Eye Colors 2": [
+      "purple eyes",
+      "red eyes",
+      "teal eyes",
+      "yellow eyes",
+      "white eyes",
+      "heterochromia",
+      "colored pupils",
+      "colored sclera",
+      "no pupils",
+      "slit pupils"
+    ],
+    "Fluff!": [
+      "fluff",
+      "butt fluff",
+      "cheek fluff",
+      "chest fluff",
+      "ear fluff",
+      "head fluff",
+      "neck fluff",
+      "pubic fluff",
+      "shoulder fluff",
+      "tail fluff"
+    ],
+    "Body coverings": [
+      "hair",
+      "fur",
+      "scales",
+      "feathers",
+      "mane"
     ],
     "Backgrounds": [
       "simple background",
@@ -128,73 +257,19 @@
       "gradient background",
       "scenery porn",
       "transparent background",
-      "white background",
-      "black background",
-      "blue background",
-      "red background",
-      "green background",
-      "cyan background",
-      "magenta background",
-      "yellow background"
-    ],
-    "Eye Colors": [
-      "black eyes",
-      "blue eyes",
-      "red eyes",
-      "green eyes",
-      "cyan eyes",
-      "magenta eyes",
-      "yellow eyes",
-      "amber eyes",
-      "colored pupils",
-      "no pupils"
-    ],
-    "Character Descriptions": [
-      "solo",
-      "solo male",
-      "solo female",
-      "oc",
-      "oc only",
-      "human only"
-    ],
-    "NSFW": [
-      "penis",
-      "vulva",
-      "vagina",
-      "nipples",
-      "breasts",
-      "clitoris",
-      "erection",
-      "vaginal secretions",
-      "knot",
-      "balls",
-      "taint"
-    ],
-    "Fluff": [
-      "fluffy",
-      "ear fluff",
-      "cheek fluff",
-      "chest fluff",
-      "pubic fluff",
-      "head fluff",
-      "neck fluff"
-    ],
-    "Limb Types": [
-      "paws",
-      "hooves",
-      "paw pads",
-      "cloven hooves",
-      "claws",
-      "talons",
-      "antlers"
+      "white background"
     ],
     "Other": [
-      "speech bubble",
+      "bust",
+      "clothes",
+      "comic",
       "dialogue",
+      "speech bubble",
+      "onomatopoeia",
+      "outdoors",
+      "part of a set",
       "text",
-      "wings",
-      "horn",
-      "tail"
+      "watermark"
     ]
   }
 }
