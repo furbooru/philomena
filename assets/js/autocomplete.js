@@ -1,9 +1,11 @@
 /**
  * Autocomplete.
  */
+import { throttle } from './utils/events.js';
 
 const cache = {};
-let inputField, originalTerm;
+const termsAllowingUnderscores = /^artist:/;
+let inputField, originalValue;
 
 function removeParent() {
   const parent = document.querySelector('.autocomplete');
@@ -20,8 +22,8 @@ function changeSelected(firstOrLast, current, sibling) {
     current.classList.remove('autocomplete__item--selected');
     sibling.classList.add('autocomplete__item--selected');
   }
-  else if (current) { // if the next keypress will take the user outside the list, restore the unautocompleted term
-    inputField.value = originalTerm;
+  else if (current) { // if the next keypress will take the user outside the list, restore the original term
+    inputField.value = originalValue;
     removeSelected();
   }
   else if (firstOrLast) { // if no item in the list is selected, select the first or last
@@ -39,9 +41,19 @@ function keydownHandler(event) {
   if (event.keyCode === 13 || event.keyCode === 27 || event.keyCode === 188) removeParent(); // Enter || Esc || Comma
   if (event.keyCode === 38 || event.keyCode === 40) { // ArrowUp || ArrowDown
     const newSelected = document.querySelector('.autocomplete__item--selected');
-    if (newSelected) inputField.value = newSelected.dataset.value;
+    if (newSelected) previewSelected(newSelected.dataset.value);
     event.preventDefault();
   }
+}
+
+function previewSelected(value) {
+  const { start, end } = getTermPosition(inputField);
+  const prefix = start === 0 ? '' : originalValue.slice(0, start);
+  const suffix = end === originalValue.length ? '' : originalValue.slice(end);
+  inputField.value = prefix + value + suffix;
+  const valueEnd = start + value.length;
+  inputField.selectionStart = valueEnd;
+  inputField.selectionEnd = valueEnd;
 }
 
 function createItem(list, suggestion) {
@@ -61,7 +73,7 @@ function createItem(list, suggestion) {
   });
 
   item.addEventListener('click', () => {
-    inputField.value = item.dataset.value;
+    previewSelected(item.dataset.value);
     inputField.dispatchEvent(
       new CustomEvent('autocomplete', {
         detail: {
@@ -90,10 +102,10 @@ function createParent() {
   const parent = document.createElement('div');
   parent.className = 'autocomplete';
 
-  // Position the parent below the inputfield
+  // Position the parent below the inputField
   parent.style.position = 'absolute';
   parent.style.left = `${inputField.offsetLeft}px`;
-  // Take the inputfield offset, add its height and subtract the amount by which the parent element has scrolled
+  // Take the inputField offset, add its height and subtract the amount by which the parent element has scrolled
   parent.style.top = `${inputField.offsetTop + inputField.offsetHeight - inputField.parentNode.scrollTop}px`;
 
   // We append the parent at the end of body
@@ -104,9 +116,6 @@ function showAutocomplete(suggestions, targetInput) {
   // Remove old autocomplete suggestions
   removeParent();
 
-  // Save suggestions in cache
-  cache[targetInput.value] = suggestions;
-
   // If the input target is not empty, still visible, and suggestions were found
   if (targetInput.value && targetInput.style.display !== 'none' && suggestions.length) {
     createParent();
@@ -115,36 +124,102 @@ function showAutocomplete(suggestions, targetInput) {
   }
 }
 
-function getSuggestions() {
-  return fetch(inputField.dataset.acSource + inputField.value).then(response => response.json());
+function getSuggestions(searchTerm) {
+  return fetch(inputField.dataset.acSource + encodeURIComponent(searchTerm))
+    .then(response => response.json())
+    .then(suggestions => {
+      // Save suggestions in cache
+      cache[searchTerm] = suggestions;
+      return suggestions;
+    });
+}
+
+/**
+ * @param {HTMLInputElement} input
+ * @param {string|number} [start] term start position to force, pass undefined or omit to clear
+ * @param {string|number} [end] term end position to force, pass undefined or omit to clear
+ */
+function setTermPosition(input, start, end) {
+  input.dataset.acTermStart = start;
+  input.dataset.acTermEnd = end;
+}
+
+/**
+ * @param {HTMLInputElement} input
+ * @returns {TokenPosition}
+ */
+function getTermPosition(input) {
+  const { acTermStart = 0, acTermEnd = input.value.length } = input.dataset;
+  return { start: Number(acTermStart), end: Number(acTermEnd) };
+}
+
+/**
+ * @param {HTMLInputElement} input
+ * @param {string} [term] term to force, pass undefined or omit to clear
+ */
+function setAutocompleteTerm(input, term = '') {
+  input.dataset.acTerm = term;
+}
+
+
+/**
+ * Apply additional transformations to the term before passing to the endpoint
+ *
+ * @param {string} term
+ * @returns {string}
+ */
+function postprocessTerm(term) {
+  let processedTerm = term;
+  // Replaces underscores with spaces where applicable
+  if (!termsAllowingUnderscores.test(term)) {
+    processedTerm = processedTerm.replace(/_/g, ' ');
+  }
+  // Remove spaces before/after namespace
+  processedTerm = processedTerm.replace(/^([^:\s]+)\s*:\s*(.*)$/g, '$1:$2');
+  return processedTerm;
+}
+
+function getSearchTerm(target) {
+  const term = typeof target.dataset.acTerm !== 'undefined' ? target.dataset.acTerm : originalValue;
+  return postprocessTerm(term);
+}
+
+const handleAutocompleteInner = throttle(300, target => {
+  inputField = target;
+  originalValue = target.value;
+  const searchTerm = getSearchTerm(target);
+  const { ac, acMinLength } = target.dataset;
+
+  if (!ac) return;
+  if (isNaN(acMinLength)) throw new Error(`Autocomplete minimum length "${acMinLength}" is invalid`);
+
+  if (searchTerm.length >= acMinLength) {
+    if (cache[searchTerm]) {
+      showAutocomplete(cache[searchTerm], target);
+    }
+    else {
+      getSuggestions(searchTerm).then(suggestions => showAutocomplete(suggestions, target));
+    }
+  }
+});
+
+/**
+ * @typedef ObjectWithTarget
+ * @property {EventTarget} target
+ */
+
+/**
+ * @param {ObjectWithTarget} event
+ */
+function handleAutocomplete(event) {
+  removeParent();
+
+  handleAutocompleteInner(event.target);
 }
 
 function listenAutocomplete() {
-  let timeout;
-
-  document.addEventListener('input', event => {
-    removeParent();
-
-    window.clearTimeout(timeout);
-    // Use a timeout to delay requests until the user has stopped typing
-    timeout = window.setTimeout(() => {
-      inputField = event.target;
-      originalTerm = inputField.value;
-      const {ac, acMinLength} = inputField.dataset;
-
-      if (ac && (inputField.value.length >= acMinLength)) {
-
-        if (cache[inputField.value]) {
-          showAutocomplete(cache[inputField.value], event.target);
-        }
-        else {
-          // inputField could get overwritten while the suggestions are being fetched - use event.target
-          getSuggestions().then(suggestions => showAutocomplete(suggestions, event.target));
-        }
-
-      }
-    }, 300);
-  });
+  // Use a timeout to delay requests until the user has stopped typing
+  document.addEventListener('input', handleAutocomplete);
 
   // If there's a click outside the inputField, remove autocomplete
   document.addEventListener('click', event => {
@@ -152,4 +227,4 @@ function listenAutocomplete() {
   });
 }
 
-export { listenAutocomplete };
+export { listenAutocomplete, handleAutocomplete, setTermPosition, getTermPosition, setAutocompleteTerm };

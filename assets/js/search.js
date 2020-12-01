@@ -1,6 +1,8 @@
 import { $, $$ } from './utils/dom';
 import { addTag } from './tagsinput';
 
+let form;
+
 function showHelp(subject, type) {
   $$('[data-search-help]').forEach(helpBox => {
     if (helpBox.getAttribute('data-search-help') === type) {
@@ -27,7 +29,7 @@ function selectLast(field, characterCount) {
 }
 
 function executeFormHelper(e) {
-  const searchField = $('.js-search-field');
+  const searchField = $('.js-search-field', form);
   const attr = name => e.target.getAttribute(name);
 
   attr('data-search-add') && addTag(searchField, attr('data-search-add'));
@@ -37,7 +39,7 @@ function executeFormHelper(e) {
 }
 
 function setupSearch() {
-  const form = $('.js-search-form');
+  form = $('.js-search-form');
 
   form && form.addEventListener('click', executeFormHelper);
 }

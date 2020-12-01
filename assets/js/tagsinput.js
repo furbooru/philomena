@@ -144,7 +144,7 @@ function fancyEditorRequested(tagBlock) {
 
 function setupTagListener() {
   document.addEventListener('addtag', event => {
-    if (event.target.value) event.target.value += ', ';
+    if (event.target.value) event.target.value = event.target.value.replace(/(,\s*)?$/, ', ');
     event.target.value += event.detail.name;
   });
 }
