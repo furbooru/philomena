@@ -35,8 +35,24 @@ config :philomena,
   camo_host: System.get_env("CAMO_HOST"),
   camo_key: System.get_env("CAMO_KEY"),
   cdn_host: System.fetch_env!("CDN_HOST"),
-  min_number_of_tags: 5,
-  app_dir: System.get_env("APP_DIR", File.cwd!())
+  min_number_of_tags: 5
+
+app_dir = System.get_env("APP_DIR", File.cwd!())
+
+json_config =
+  %{
+    aggregation: "aggregation.json",
+    avatar: "avatar.json",
+    footer: "footer.json",
+    quick_tag_table: "quick_tag_table.json",
+    tag: "tag.json"
+  }
+  |> Map.new(fn {name, file} ->
+    {name, Jason.decode!(File.read!("#{app_dir}/config/#{file}"))}
+  end)
+
+config :philomena,
+  config: json_config
 
 config :exq,
   host: System.get_env("REDIS_HOST", "localhost"),

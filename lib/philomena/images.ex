@@ -18,6 +18,7 @@ defmodule Philomena.Images do
   alias Philomena.Images.ElasticsearchIndex, as: ImageIndex
   alias Philomena.ImageFeatures.ImageFeature
   alias Philomena.SourceChanges.SourceChange
+  alias Philomena.Notifications.Notification
   alias Philomena.TagChanges.TagChange
   alias Philomena.Tags
   alias Philomena.UserStatistics
@@ -27,6 +28,8 @@ defmodule Philomena.Images do
   alias Philomena.Reports
   alias Philomena.Reports.Report
   alias Philomena.Comments
+  alias Philomena.Galleries.Gallery
+  alias Philomena.Galleries.Interaction
 
   @doc """
   Gets a single image.
@@ -422,9 +425,18 @@ defmodule Philomena.Images do
       |> select([r], r.id)
       |> update(set: [open: false, state: "closed", admin_id: ^user.id])
 
+    galleries =
+      Gallery
+      |> join(:inner, [g], gi in assoc(g, :interactions), on: gi.image_id == ^image.id)
+      |> update(inc: [image_count: -1])
+
+    gallery_interactions = where(Interaction, image_id: ^image.id)
+
     multi
     |> Multi.update(:image, changeset)
     |> Multi.update_all(:reports, reports, [])
+    |> Multi.update_all(:galleries, galleries, [])
+    |> Multi.delete_all(:gallery_interactions, gallery_interactions, [])
     |> Multi.run(:tags, fn repo, %{image: image} ->
       image = Repo.preload(image, :tags, force: true)
 
@@ -717,7 +729,12 @@ defmodule Philomena.Images do
       |> select([s], %{image_id: type(^target.id, :integer), user_id: s.user_id})
       |> Repo.all()
 
-    {count, nil} = Repo.insert_all(Subscription, subscriptions, on_conflict: :nothing)
+    Repo.insert_all(Subscription, subscriptions, on_conflict: :nothing)
+
+    {count, nil} =
+      Notification
+      |> where(actor_type: "Image", actor_id: ^source.id)
+      |> Repo.update_all(set: [actor_id: target.id])
 
     {:ok, count}
   end
