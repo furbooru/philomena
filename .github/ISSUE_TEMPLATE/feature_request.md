@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+**Important note**
+If the feature you are requesting is not specific to Furbooru, please send your request to the [upstream repository](https://github.com/philomena-dev/philomena) instead.
+- [ ] My feature request is specific to Furbooru
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
