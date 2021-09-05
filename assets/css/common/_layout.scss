@@ -400,7 +400,7 @@ figure {
   padding: 4px 16px;
 }
 
-.twofactor {
+.minimal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -416,4 +416,17 @@ figure {
   .communication__options {
     background: 0 !important;
   }
+}
+
+.minimal__message {
+  padding: 30px;
+  max-width: 560px;
+  width: 100%;
+  margin: auto;
+  text-align: left;
+  background-color: $header_secondary_color;
+}
+
+.minimal__message__header {
+  margin: 0 0 10px 0;
 }
