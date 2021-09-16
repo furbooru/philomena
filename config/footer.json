@@ -42,7 +42,8 @@
     {
       "title": "Changelog",
       "url": "https://github.com/furbooru/philomena/commits/master",
-      "bold": true
+      "bold": true,
+      "target": "_blank"
     },
     {
       "title": "FAQs",
@@ -91,7 +92,8 @@
     },
     {
       "title": "Twitter",
-      "url": "https://twitter.com/Furbooru"
+      "url": "https://twitter.com/Furbooru",
+      "target": "_blank"
     }
   ]
 }
