@@ -3,19 +3,25 @@ defmodule Philomena.Objects do
   Replication wrapper for object storage backends.
   """
   alias Philomena.Mime
+  require Logger
 
   #
-  # Fetch a key from the primary storage backend and
+  # Fetch a key from the storage backend and
   # write it into the destination file.
   #
   # sobelow_skip ["Traversal.FileModule"]
   @spec download_file(String.t(), String.t()) :: any()
   def download_file(key, file_path) do
-    [opts] = primary_opts()
-
     contents =
-      ExAws.S3.get_object(opts[:bucket], key)
-      |> ExAws.request!(opts[:config_overrides])
+      backends()
+      |> Enum.find_value(fn opts ->
+        ExAws.S3.get_object(opts[:bucket], key)
+        |> ExAws.request(opts[:config_overrides])
+        |> case do
+          {:ok, result} -> result
+          _ -> nil
+        end
+      end)
 
     File.write!(file_path, contents.body)
   end
@@ -58,10 +64,20 @@ defmodule Philomena.Objects do
   #
   @spec copy(String.t(), String.t()) :: any()
   def copy(source_key, dest_key) do
-    run_all(fn opts ->
-      ExAws.S3.put_object_copy(opts[:bucket], dest_key, opts[:bucket], source_key)
-      |> ExAws.request!(opts[:config_overrides])
-    end)
+    # Potential workaround for inconsistent PutObjectCopy on R2
+    #
+    # run_all(fn opts->
+    #   ExAws.S3.put_object_copy(opts[:bucket], dest_key, opts[:bucket], source_key)
+    #   |> ExAws.request!(opts[:config_overrides])
+    # end)
+
+    try do
+      file_path = Briefly.create!()
+      download_file(source_key, file_path)
+      upload(dest_key, file_path)
+    catch
+      _kind, _value -> Logger.warn("Failed to copy #{source_key} -> #{dest_key}")
+    end
   end
 
   #
@@ -86,10 +102,26 @@ defmodule Philomena.Objects do
     end)
   end
 
-  defp run_all(fun) do
+  defp run_all(wrapped) do
+    fun = fn opts ->
+      try do
+        wrapped.(opts)
+        :ok
+      catch
+        _kind, _value -> :error
+      end
+    end
+
     backends()
     |> Task.async_stream(fun, timeout: :infinity)
-    |> Stream.run()
+    |> Enum.any?(fn {_, v} -> v == :error end)
+    |> case do
+      true ->
+        Logger.warn("Failed to operate on all backends")
+
+      _ ->
+        :ok
+    end
   end
 
   defp backends do

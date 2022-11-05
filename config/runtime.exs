@@ -97,7 +97,9 @@ config :ex_aws, :hackney_opts,
   pool: false
 
 config :ex_aws, :retries,
-  max_attempts: 20
+  max_attempts: 20,
+  base_backoff_in_ms: 10,
+  max_backoff_in_ms: 10_000
 
 if config_env() != :test do
   # Database config
