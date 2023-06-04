@@ -200,18 +200,11 @@ span.spoiler div.image-container {
 }
 
 .image-description {
-  margin-bottom: 5px;
   overflow: auto;
+
   img {
     max-width: 100%;
   }
-  background: $background_odd_color;
-  border: $border;
-}
-
-.image-description__text {
-  padding: 0 6px;
-  margin-bottom: 2px;
 }
 
 .image-size {
@@ -321,4 +314,18 @@ span.spoiler div.image-container {
 
 .full-height {
   height: 100%;
+}
+
+.image_sources {
+  display: grid;
+  grid-template-columns: 2em auto;
+}
+
+.image_source__icon, .image_source__link {
+  padding: 0.5em;
+  overflow: hidden;
+}
+
+.image_source__icon {
+  justify-self: center;
 }
