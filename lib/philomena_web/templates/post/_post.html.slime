@@ -57,10 +57,10 @@ article.block.communication id="post_#{@post.id}"
                 | This post's contents have been destroyed.
             - else
               br
-              ==<> @body
+              =<> @body
 
         - else
-          ==<> @body
+          =<> @body
 
   = if not @post.hidden_from_users or can?(@conn, :hide, @post) do
     .block__content.communication__options
