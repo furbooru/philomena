@@ -2,7 +2,7 @@ defmodule PhilomenaWeb.TagController do
   use PhilomenaWeb, :controller
 
   alias PhilomenaWeb.ImageLoader
-  alias Philomena.Elasticsearch
+  alias PhilomenaQuery.Search
   alias Philomena.{Tags, Tags.Tag}
   alias Philomena.{Images, Images.Image}
   alias PhilomenaWeb.MarkdownRenderer
@@ -34,7 +34,7 @@ defmodule PhilomenaWeb.TagController do
     with {:ok, query} <- Tags.Query.compile(query_string) do
       tags =
         Tag
-        |> Elasticsearch.search_definition(
+        |> Search.search_definition(
           %{
             query: query,
             size: 250,
@@ -42,7 +42,7 @@ defmodule PhilomenaWeb.TagController do
           },
           %{conn.assigns.pagination | page_size: 250}
         )
-        |> Elasticsearch.search_records(Tag)
+        |> Search.search_records(Tag)
 
       render(conn, "index.html", title: "Tags", tags: tags)
     else
@@ -57,7 +57,7 @@ defmodule PhilomenaWeb.TagController do
 
     {images, _tags} = ImageLoader.query(conn, %{term: %{"namespaced_tags.name" => tag.name}})
 
-    images = Elasticsearch.search_records(images, preload(Image, [:sources, tags: :aliases]))
+    images = Search.search_records(images, preload(Image, [:sources, tags: :aliases]))
 
     interactions = Interactions.user_interactions(images, user)
 
@@ -97,8 +97,8 @@ defmodule PhilomenaWeb.TagController do
       {:ok, tag} ->
         conn
         |> put_flash(:info, "Tag successfully updated.")
-        |> moderation_log(details: &log_details/3, data: tag)
-        |> redirect(to: Routes.tag_path(conn, :show, tag))
+        |> moderation_log(details: &log_details/2, data: tag)
+        |> redirect(to: ~p"/tags/#{tag}")
 
       {:error, changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -110,7 +110,7 @@ defmodule PhilomenaWeb.TagController do
 
     conn
     |> put_flash(:info, "Tag queued for deletion.")
-    |> moderation_log(details: &log_details/3, data: tag)
+    |> moderation_log(details: &log_details/2, data: tag)
     |> redirect(to: "/")
   end
 
@@ -167,12 +167,12 @@ defmodule PhilomenaWeb.TagController do
           :info,
           "This tag (\"#{conn.assigns.tag.name}\") has been aliased into the tag \"#{tag.name}\"."
         )
-        |> redirect(to: Routes.tag_path(conn, :show, tag))
+        |> redirect(to: ~p"/tags/#{tag}")
         |> halt()
     end
   end
 
-  defp log_details(conn, action, tag) do
+  defp log_details(action, tag) do
     body =
       case action do
         :update -> "Updated details on tag '#{tag.name}'"
@@ -181,7 +181,7 @@ defmodule PhilomenaWeb.TagController do
 
     %{
       body: body,
-      subject_path: Routes.tag_path(conn, :show, tag)
+      subject_path: ~p"/tags/#{tag}"
     }
   end
 end

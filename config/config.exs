@@ -16,9 +16,6 @@ config :logger,
 config :philomena,
   ecto_repos: [Philomena.Repo]
 
-config :elastix,
-  json_codec: Jason
-
 config :exq,
   max_retries: 5,
   scheduler_enable: true,
@@ -31,10 +28,14 @@ config :canary,
 
 # Configures the endpoint
 config :philomena, PhilomenaWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   secret_key_base: "xZYTon09JNRrj8snd7KL31wya4x71jmo5aaSSRmw1dGjWLRmEwWMTccwxgsGFGjM",
   render_errors: [view: PhilomenaWeb.ErrorView, accepts: ~w(html json)],
   pubsub_server: Philomena.PubSub
+
+# Configure only SMTP for mailing, not HTTP
+config :swoosh, :api_client, false
 
 # Markdown
 config :philomena, Philomena.Native,
@@ -46,8 +47,6 @@ config :phoenix, :template_engines,
   slime: PhoenixSlime.Engine,
   slimleex: PhoenixSlime.LiveViewEngine
 
-config :tesla, adapter: Tesla.Adapter.Mint
-
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -58,7 +57,6 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-config :bamboo, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

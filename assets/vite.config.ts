@@ -24,6 +24,10 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   return {
     publicDir: 'static',
     plugins: [],
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+    },
     resolve: {
       alias: {
         common: path.resolve(__dirname, 'css/common/'),
@@ -39,7 +43,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       cssCodeSplit: true,
       rollupOptions: {
         input: {
-          'js/app': './js/app.js',
+          'js/app': './js/app.ts',
           ...Object.fromEntries(themes)
         },
         output: {

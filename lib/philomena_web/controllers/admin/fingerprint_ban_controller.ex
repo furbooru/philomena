@@ -7,7 +7,12 @@ defmodule PhilomenaWeb.Admin.FingerprintBanController do
   import Ecto.Query
 
   plug :verify_authorized
-  plug :load_resource, model: FingerprintBan, only: [:edit, :update, :delete]
+
+  plug :load_resource,
+    model: FingerprintBan,
+    as: :fingerprint_ban,
+    only: [:edit, :update, :delete]
+
   plug :check_can_delete when action in [:delete]
 
   def index(conn, %{"q" => q}) when is_binary(q) do
@@ -47,8 +52,8 @@ defmodule PhilomenaWeb.Admin.FingerprintBanController do
       {:ok, fingerprint_ban} ->
         conn
         |> put_flash(:info, "Fingerprint was successfully banned.")
-        |> moderation_log(details: &log_details/3, data: fingerprint_ban)
-        |> redirect(to: Routes.admin_fingerprint_ban_path(conn, :index))
+        |> moderation_log(details: &log_details/2, data: fingerprint_ban)
+        |> redirect(to: ~p"/admin/fingerprint_bans")
 
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -56,17 +61,17 @@ defmodule PhilomenaWeb.Admin.FingerprintBanController do
   end
 
   def edit(conn, _params) do
-    changeset = Bans.change_fingerprint(conn.assigns.fingerprint)
+    changeset = Bans.change_fingerprint(conn.assigns.fingerprint_ban)
     render(conn, "edit.html", title: "Editing Fingerprint Ban", changeset: changeset)
   end
 
   def update(conn, %{"fingerprint" => fingerprint_ban_params}) do
-    case Bans.update_fingerprint(conn.assigns.fingerprint, fingerprint_ban_params) do
+    case Bans.update_fingerprint(conn.assigns.fingerprint_ban, fingerprint_ban_params) do
       {:ok, fingerprint_ban} ->
         conn
         |> put_flash(:info, "Fingerprint ban successfully updated.")
-        |> moderation_log(details: &log_details/3, data: fingerprint_ban)
-        |> redirect(to: Routes.admin_fingerprint_ban_path(conn, :index))
+        |> moderation_log(details: &log_details/2, data: fingerprint_ban)
+        |> redirect(to: ~p"/admin/fingerprint_bans")
 
       {:error, changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -74,12 +79,12 @@ defmodule PhilomenaWeb.Admin.FingerprintBanController do
   end
 
   def delete(conn, _params) do
-    {:ok, fingerprint_ban} = Bans.delete_fingerprint(conn.assigns.fingerprint)
+    {:ok, fingerprint_ban} = Bans.delete_fingerprint(conn.assigns.fingerprint_ban)
 
     conn
     |> put_flash(:info, "Fingerprint ban successfully deleted.")
-    |> moderation_log(details: &log_details/3, data: fingerprint_ban)
-    |> redirect(to: Routes.admin_fingerprint_ban_path(conn, :index))
+    |> moderation_log(details: &log_details/2, data: fingerprint_ban)
+    |> redirect(to: ~p"/admin/fingerprint_bans")
   end
 
   defp load_bans(queryable, conn) do
@@ -110,7 +115,7 @@ defmodule PhilomenaWeb.Admin.FingerprintBanController do
     end
   end
 
-  defp log_details(conn, action, ban) do
+  defp log_details(action, ban) do
     body =
       case action do
         :create -> "Created a fingerprint ban #{ban.generated_ban_id}"
@@ -118,6 +123,6 @@ defmodule PhilomenaWeb.Admin.FingerprintBanController do
         :delete -> "Deleted a fingerprint ban #{ban.generated_ban_id}"
       end
 
-    %{body: body, subject_path: Routes.admin_fingerprint_ban_path(conn, :index)}
+    %{body: body, subject_path: ~p"/admin/fingerprint_bans"}
   end
 end

@@ -42,9 +42,9 @@ defmodule PhilomenaWeb.LayoutView do
     data = [
       filter_id: filter.id,
       hidden_tag_list: Jason.encode!(filter.hidden_tag_ids),
-      hidden_filter: Philomena.Search.String.normalize(filter.hidden_complex_str || ""),
+      hidden_filter: PhilomenaQuery.Parse.String.normalize(filter.hidden_complex_str || ""),
       spoilered_tag_list: Jason.encode!(filter.spoilered_tag_ids),
-      spoilered_filter: Philomena.Search.String.normalize(filter.spoilered_complex_str || ""),
+      spoilered_filter: PhilomenaQuery.Parse.String.normalize(filter.spoilered_complex_str || ""),
       user_id: if(user, do: user.id, else: nil),
       user_name: if(user, do: user.name, else: nil),
       user_slug: if(user, do: user.slug, else: nil),
@@ -68,21 +68,14 @@ defmodule PhilomenaWeb.LayoutView do
     Config.get(:footer)
   end
 
-  def stylesheet_path(conn, %{theme: "dark"}),
-    do: Routes.static_path(conn, "/css/dark.css")
-
-  def stylesheet_path(conn, %{theme: "light"}),
-    do: Routes.static_path(conn, "/css/light.css")
-
-  def stylesheet_path(conn, _user),
-    do: Routes.static_path(conn, "/css/default.css")
-
   def theme_color(%{theme: "dark"}), do: "#284371"
   def theme_color(%{theme: "light"}), do: "#3d92d0"
   def theme_color(_user), do: "#36274e"
 
-  def dark_stylesheet_path(conn),
-    do: Routes.static_path(conn, "/css/default.css")
+  def stylesheet_path(%{theme: "dark"}), do: ~p"/css/dark.css"
+  def stylesheet_path(%{theme: "light"}), do: ~p"/css/light.css"
+  def stylesheet_path(_user), do: ~p"/css/default.css"
+  def dark_stylesheet_path, do: ~p"/css/default.css"
 
   def theme_name(%{theme: theme}), do: theme
   def theme_name(_user), do: "default"

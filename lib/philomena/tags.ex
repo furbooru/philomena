@@ -6,7 +6,7 @@ defmodule Philomena.Tags do
   import Ecto.Query, warn: false
   alias Philomena.Repo
 
-  alias Philomena.Elasticsearch
+  alias PhilomenaQuery.Search
   alias Philomena.IndexWorker
   alias Philomena.TagAliasWorker
   alias Philomena.TagUnaliasWorker
@@ -80,6 +80,31 @@ defmodule Philomena.Tags do
 
   """
   def get_tag!(id), do: Repo.get!(Tag, id)
+
+  @doc """
+  Gets a single tag by its name, or the tag it is aliased to, if it is aliased.
+
+  Returns nil if the tag does not exist.
+
+  ## Examples
+
+      iex> get_tag_or_alias_by_name("safe")
+      %Tag{}
+
+      iex> get_tag_or_alias_by_name("nonexistent")
+      nil
+
+  """
+  def get_tag_or_alias_by_name(name) do
+    Tag
+    |> where(name: ^name)
+    |> preload(:aliased_tag)
+    |> Repo.one()
+    |> case do
+      nil -> nil
+      tag -> tag.aliased_tag || tag
+    end
+  end
 
   @doc """
   Creates a tag.
@@ -194,12 +219,12 @@ defmodule Philomena.Tags do
 
     {:ok, tag} = Repo.delete(tag)
 
-    Elasticsearch.delete_document(tag.id, Tag)
+    Search.delete_document(tag.id, Tag)
 
     Image
     |> where([i], i.id in ^image_ids)
     |> preload(^Images.indexing_preloads())
-    |> Elasticsearch.reindex(Image)
+    |> Search.reindex(Image)
   end
 
   def alias_tag(%Tag{} = tag, attrs) do
@@ -251,7 +276,7 @@ defmodule Philomena.Tags do
     |> where(tag_id: ^tag.id)
     |> Repo.delete_all()
 
-    # Update other assocations
+    # Update other associations
     ArtistLink
     |> where(tag_id: ^tag.id)
     |> Repo.update_all(set: [tag_id: target_tag.id])
@@ -301,13 +326,13 @@ defmodule Philomena.Tags do
     |> join(:inner, [i], _ in assoc(i, :tags))
     |> where([_i, t], t.id == ^tag.id)
     |> preload(^Images.indexing_preloads())
-    |> Elasticsearch.reindex(Image)
+    |> Search.reindex(Image)
 
     Filter
     |> where([f], fragment("? @> ARRAY[?]::integer[]", f.hidden_tag_ids, ^tag.id))
     |> or_where([f], fragment("? @> ARRAY[?]::integer[]", f.spoilered_tag_ids, ^tag.id))
     |> preload(^Filters.indexing_preloads())
-    |> Elasticsearch.reindex(Filter)
+    |> Search.reindex(Filter)
   end
 
   def unalias_tag(%Tag{} = tag) do
@@ -416,7 +441,7 @@ defmodule Philomena.Tags do
     Tag
     |> preload(^indexing_preloads())
     |> where([t], field(t, ^column) in ^condition)
-    |> Elasticsearch.reindex(Tag)
+    |> Search.reindex(Tag)
   end
 
   alias Philomena.Tags.Implication

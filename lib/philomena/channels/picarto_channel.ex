@@ -4,9 +4,9 @@ defmodule Philomena.Channels.PicartoChannel do
   @spec live_channels(DateTime.t()) :: map()
   def live_channels(now) do
     @api_online
-    |> Philomena.Http.get()
+    |> PhilomenaProxy.Http.get()
     |> case do
-      {:ok, %Tesla.Env{body: body, status: 200}} ->
+      {:ok, %{body: body, status: 200}} ->
         body
         |> Jason.decode!()
         |> Map.new(&{&1["name"], fetch(&1, now)})

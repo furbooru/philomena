@@ -21,10 +21,11 @@ defmodule PhilomenaWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import PhilomenaWeb.ConnCase
-      alias PhilomenaWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint PhilomenaWeb.Endpoint
+
+      use PhilomenaWeb, :verified_routes
     end
   end
 
@@ -40,9 +41,11 @@ defmodule PhilomenaWeb.ConnCase do
     |> Philomena.Filters.change_filter()
     |> Philomena.Repo.insert!()
 
+    fingerprint = to_string(:io_lib.format(~c"d~14.16.0b", [:rand.uniform(2 ** 53)]))
+
     conn =
       Phoenix.ConnTest.build_conn()
-      |> Phoenix.ConnTest.put_req_cookie("_ses", Integer.to_string(System.unique_integer()))
+      |> Phoenix.ConnTest.put_req_cookie("_ses", fingerprint)
 
     {:ok, conn: conn}
   end

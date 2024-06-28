@@ -9,6 +9,7 @@ defmodule PhilomenaWeb.UserAuthTest do
     conn =
       conn
       |> Map.replace!(:secret_key_base, PhilomenaWeb.Endpoint.config(:secret_key_base))
+      |> assign(:fingerprint, "d015c342859dde3")
       |> init_test_session(%{})
 
     %{user: user_fixture(), conn: conn}
@@ -162,7 +163,7 @@ defmodule PhilomenaWeb.UserAuthTest do
     test "redirects if user is not authenticated", %{conn: conn} do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
-      assert redirected_to(conn) == Routes.session_path(conn, :new)
+      assert redirected_to(conn) == ~p"/sessions/new"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
                "You must log in to access this page."

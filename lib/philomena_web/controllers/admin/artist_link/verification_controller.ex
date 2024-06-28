@@ -13,19 +13,19 @@ defmodule PhilomenaWeb.Admin.ArtistLink.VerificationController do
     preload: [:user]
 
   def create(conn, _params) do
-    {:ok, result} =
+    {:ok, artist_link} =
       ArtistLinks.verify_artist_link(conn.assigns.artist_link, conn.assigns.current_user)
 
     conn
     |> put_flash(:info, "Artist link successfully verified.")
-    |> moderation_log(details: &log_details/3, data: result.artist_link)
-    |> redirect(to: Routes.admin_artist_link_path(conn, :index))
+    |> moderation_log(details: &log_details/2, data: artist_link)
+    |> redirect(to: ~p"/admin/artist_links")
   end
 
-  defp log_details(conn, _action, artist_link) do
+  defp log_details(_action, artist_link) do
     %{
       body: "Verified artist link #{artist_link.uri} created by #{artist_link.user.name}",
-      subject_path: Routes.profile_artist_link_path(conn, :show, artist_link.user, artist_link)
+      subject_path: ~p"/profiles/#{artist_link.user}/artist_links/#{artist_link}"
     }
   end
 end

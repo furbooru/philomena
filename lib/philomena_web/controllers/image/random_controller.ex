@@ -4,7 +4,7 @@ defmodule PhilomenaWeb.Image.RandomController do
   alias PhilomenaWeb.ImageSorter
   alias PhilomenaWeb.ImageScope
   alias PhilomenaWeb.ImageLoader
-  alias Philomena.Elasticsearch
+  alias PhilomenaQuery.Search
   alias Philomena.Images.Image
 
   def index(conn, params) do
@@ -20,10 +20,10 @@ defmodule PhilomenaWeb.Image.RandomController do
 
     case unwrap_random_result(search_definition) do
       nil ->
-        redirect(conn, to: Routes.image_path(conn, :index))
+        redirect(conn, to: ~p"/images")
 
       random_id ->
-        redirect(conn, to: Routes.image_path(conn, :show, random_id, scope))
+        redirect(conn, to: ~p"/images/#{random_id}?#{scope}")
     end
   end
 
@@ -32,7 +32,7 @@ defmodule PhilomenaWeb.Image.RandomController do
 
   defp unwrap_random_result({:ok, {definition, _tags}}) do
     definition
-    |> Elasticsearch.search_records(Image)
+    |> Search.search_records(Image)
     |> Enum.to_list()
     |> unwrap()
   end

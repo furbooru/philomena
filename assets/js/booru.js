@@ -1,5 +1,5 @@
 import { $ } from './utils/dom';
-import parseSearch from './match_query';
+import { parseSearch } from './match_query';
 import store from './utils/store';
 
 /**
@@ -122,7 +122,7 @@ function initializeFilters() {
 
 function unmarshal(data) {
   try { return JSON.parse(data); }
-  catch (_) { return data; }
+  catch { return data; }
 }
 
 function loadBooruData() {

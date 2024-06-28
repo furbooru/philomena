@@ -1,5 +1,5 @@
 defmodule Philomena.Galleries.Query do
-  alias Philomena.Search.Parser
+  alias PhilomenaQuery.Parse.Parser
 
   defp fields do
     [
@@ -18,7 +18,7 @@ defmodule Philomena.Galleries.Query do
     query_string = query_string || ""
 
     fields()
-    |> Parser.parser()
+    |> Parser.new()
     |> Parser.parse(query_string)
   end
 end

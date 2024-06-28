@@ -28,7 +28,7 @@ defmodule PhilomenaWeb.Admin.SiteNoticeController do
       {:ok, _site_notice} ->
         conn
         |> put_flash(:info, "Successfully created site notice.")
-        |> redirect(to: Routes.admin_site_notice_path(conn, :index))
+        |> redirect(to: ~p"/admin/site_notices")
 
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -44,8 +44,8 @@ defmodule PhilomenaWeb.Admin.SiteNoticeController do
     case SiteNotices.update_site_notice(conn.assigns.site_notice, site_notice_params) do
       {:ok, _site_notice} ->
         conn
-        |> put_flash(:info, "Succesfully updated site notice.")
-        |> redirect(to: Routes.admin_site_notice_path(conn, :index))
+        |> put_flash(:info, "Successfully updated site notice.")
+        |> redirect(to: ~p"/admin/site_notices")
 
       {:error, changeset} ->
         render(conn, "edit.html", changeset: changeset)
@@ -56,8 +56,8 @@ defmodule PhilomenaWeb.Admin.SiteNoticeController do
     {:ok, _site_notice} = SiteNotices.delete_site_notice(conn.assigns.site_notice)
 
     conn
-    |> put_flash(:info, "Sucessfully deleted site notice.")
-    |> redirect(to: Routes.admin_site_notice_path(conn, :index))
+    |> put_flash(:info, "Successfully deleted site notice.")
+    |> redirect(to: ~p"/admin/site_notices")
   end
 
   defp verify_authorized(conn, _opts) do

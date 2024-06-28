@@ -1,9 +1,9 @@
 defmodule Philomena.Users.UserNotifier do
-  alias Bamboo.Email
+  alias Swoosh.Email
   alias Philomena.Mailer
 
   defp deliver(to, subject, body) do
-    Email.new_email(
+    Email.new(
       to: to,
       from: mailer_address(),
       subject: subject,
@@ -88,7 +88,7 @@ defmodule Philomena.Users.UserNotifier do
 
     Your account has been automatically locked due to too many attempts to sign in.
 
-    You can unlock your account by visting the URL below:
+    You can unlock your account by visiting the URL below:
 
     #{url}
 

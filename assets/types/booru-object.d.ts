@@ -65,6 +65,14 @@ interface BooruObject {
   spoileredFilter: AstMatcher;
   tagsVersion: number;
   interactions: Interaction[];
+  /**
+   * Indicates whether sensitive staff-only info should be hidden or not.
+   */
+  hideStaffTools: string;
+  /**
+   * List of image IDs in the current gallery.
+   */
+  galleryImages?: number[];
 }
 
 declare global {

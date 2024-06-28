@@ -1,5 +1,5 @@
 defmodule Philomena.Tags.Query do
-  alias Philomena.Search.Parser
+  alias PhilomenaQuery.Parse.Parser
 
   defp fields do
     [
@@ -19,7 +19,7 @@ defmodule Philomena.Tags.Query do
 
   def compile(query_string) do
     fields()
-    |> Parser.parser()
+    |> Parser.new()
     |> Parser.parse(query_string || "")
   end
 end
