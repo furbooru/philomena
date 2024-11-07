@@ -1,15 +1,16 @@
 DATABASE ?= philomena
+OPENSEARCH_URL ?= http://localhost:9200/
 ELASTICDUMP ?= elasticdump
 .ONESHELL:
 
 all: import_es
 
 import_es: dump_jsonl
-	$(ELASTICDUMP) --input=posts.jsonl --output=http://localhost:9200/ --output-index=posts --limit 10000 --retryAttempts=5 --type=data --transform="doc._source = Object.assign({},doc); doc._id = doc.id"
+	$(ELASTICDUMP) --input=posts.jsonl --output=$OPENSEARCH_URL --output-index=posts --limit 10000 --retryAttempts=5 --type=data --transform="doc._source = Object.assign({},doc); doc._id = doc.id"
 
 dump_jsonl: metadata authors
-	psql $(DATABASE) -v ON_ERROR_STOP=1 <<< 'copy (select temp_posts.jsonb_object_agg(object) from temp_posts.post_search_json group by post_id) to stdout;' > posts.jsonl
-	psql $(DATABASE) -v ON_ERROR_STOP=1 <<< 'drop schema temp_posts cascade;'
+	psql $(DATABASE) -v ON_ERROR_STOP=1 -c 'copy (select temp_posts.jsonb_object_agg(object) from temp_posts.post_search_json group by post_id) to stdout;' > posts.jsonl
+	psql $(DATABASE) -v ON_ERROR_STOP=1 -c 'drop schema temp_posts cascade;'
 	sed -i posts.jsonl -e 's/\\\\/\\/g'
 
 metadata: post_search_json
@@ -20,8 +21,8 @@ metadata: post_search_json
 			'body', p.body,
 			'subject', t.title,
 			'ip', p.ip,
-			'user_agent', p.user_agent,
-			'referrer', p.referrer,
+			'user_agent', '',
+			'referrer', '',
 			'fingerprint', p.fingerprint,
 			'topic_position', p.topic_position,
 			'forum', f.short_name,

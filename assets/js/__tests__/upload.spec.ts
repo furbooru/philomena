@@ -25,16 +25,23 @@ const errorResponse = {
 };
 /* eslint-enable camelcase */
 
+const tagSets = ['', 'a tag', 'safe', 'one, two, three', 'safe, explicit', 'safe, explicit, three', 'safe, two, three'];
+const tagErrorCounts = [1, 2, 1, 1, 2, 1, 0];
+
 describe('Image upload form', () => {
   let mockPng: File;
   let mockWebm: File;
 
-  beforeAll(async() => {
+  beforeAll(async () => {
     const mockPngPath = join(__dirname, 'upload-test.png');
     const mockWebmPath = join(__dirname, 'upload-test.webm');
 
-    mockPng = new File([(await promises.readFile(mockPngPath, { encoding: null })).buffer], 'upload-test.png', { type: 'image/png' });
-    mockWebm = new File([(await promises.readFile(mockWebmPath, { encoding: null })).buffer], 'upload-test.webm', { type: 'video/webm' });
+    mockPng = new File([(await promises.readFile(mockPngPath, { encoding: null })).buffer], 'upload-test.png', {
+      type: 'image/png',
+    });
+    mockWebm = new File([(await promises.readFile(mockWebmPath, { encoding: null })).buffer], 'upload-test.webm', {
+      type: 'video/webm',
+    });
   });
 
   beforeAll(() => {
@@ -47,7 +54,6 @@ describe('Image upload form', () => {
 
   fixEventListeners(window);
 
-
   let form: HTMLFormElement;
   let imgPreviews: HTMLDivElement;
   let fileField: HTMLInputElement;
@@ -55,16 +61,27 @@ describe('Image upload form', () => {
   let scraperError: HTMLDivElement;
   let fetchButton: HTMLButtonElement;
   let tagsEl: HTMLTextAreaElement;
+  let taginputEl: HTMLDivElement;
   let sourceEl: HTMLInputElement;
   let descrEl: HTMLTextAreaElement;
+  let submitButton: HTMLButtonElement;
 
   const assertFetchButtonIsDisabled = () => {
     if (!fetchButton.hasAttribute('disabled')) throw new Error('fetchButton is not disabled');
   };
 
+  const assertSubmitButtonIsDisabled = () => {
+    if (!submitButton.hasAttribute('disabled')) throw new Error('submitButton is not disabled');
+  };
+
+  const assertSubmitButtonIsEnabled = () => {
+    if (submitButton.hasAttribute('disabled')) throw new Error('submitButton is disabled');
+  };
+
   beforeEach(() => {
-    document.documentElement.insertAdjacentHTML('beforeend', `
-      <form action="/images">
+    document.documentElement.insertAdjacentHTML(
+      'beforeend',
+      `<form action="/images">
         <div id="js-image-upload-previews"></div>
         <input id="image_image" name="image[image]" type="file" class="js-scraper" />
         <input id="image_scraper_url" name="image[scraper_url]" type="url" class="js-scraper" />
@@ -73,9 +90,14 @@ describe('Image upload form', () => {
 
         <input id="image_sources_0_source" name="image[sources][0][source]" type="text" class="js-source-url" />
         <textarea id="image_tag_input" name="image[tag_input]" class="js-image-tags-input"></textarea>
+        <div class="js-taginput"></div>
+        <button id="tagsinput-save" type="button" class="button">Save</button>
         <textarea id="image_description" name="image[description]" class="js-image-descr-input"></textarea>
-      </form>
-    `);
+        <div class="actions">
+          <button class="button input--separate-top" type="submit">Upload</button>
+        </div>
+       </form>`,
+    );
 
     form = assertNotNull($<HTMLFormElement>('form'));
     imgPreviews = assertNotNull($<HTMLDivElement>('#js-image-upload-previews'));
@@ -83,9 +105,11 @@ describe('Image upload form', () => {
     remoteUrl = assertNotUndefined($$<HTMLInputElement>('.js-scraper')[1]);
     scraperError = assertNotUndefined($$<HTMLInputElement>('.js-scraper')[2]);
     tagsEl = assertNotNull($<HTMLTextAreaElement>('.js-image-tags-input'));
+    taginputEl = assertNotNull($<HTMLDivElement>('.js-taginput'));
     sourceEl = assertNotNull($<HTMLInputElement>('.js-source-url'));
     descrEl = assertNotNull($<HTMLTextAreaElement>('.js-image-descr-input'));
     fetchButton = assertNotNull($<HTMLButtonElement>('#js-scraper-preview'));
+    submitButton = assertNotNull($<HTMLButtonElement>('.actions > .button'));
 
     setupImageUpload();
     fetchMock.resetMocks();
@@ -121,7 +145,7 @@ describe('Image upload form', () => {
     });
   });
 
-  it('should block navigation away after an image file is attached, but not after form submission', async() => {
+  it('should block navigation away after an image file is attached, but not after form submission', async () => {
     fireEvent.change(fileField, { target: { files: [mockPng] } });
     await waitFor(() => {
       assertFetchButtonIsDisabled();
@@ -143,7 +167,7 @@ describe('Image upload form', () => {
     expect(fireEvent(window, succeededUnloadEvent)).toBe(true);
   });
 
-  it('should scrape images when the fetch button is clicked', async() => {
+  it('should scrape images when the fetch button is clicked', async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify(scrapeResponse), { status: 200 }));
     fireEvent.input(remoteUrl, { target: { value: 'http://localhost/images/1' } });
 
@@ -188,5 +212,43 @@ describe('Image upload form', () => {
       expect(imgPreviews.querySelectorAll('img')).toHaveLength(0);
       expect(scraperError.innerText).toEqual('Error 1 Error 2');
     });
+  });
+
+  async function submitForm(frm: HTMLFormElement): Promise<boolean> {
+    return new Promise(resolve => {
+      function onSubmit() {
+        frm.removeEventListener('submit', onSubmit);
+        resolve(true);
+      }
+
+      frm.addEventListener('submit', onSubmit);
+
+      if (!fireEvent.submit(frm)) {
+        frm.removeEventListener('submit', onSubmit);
+        resolve(false);
+      }
+    });
+  }
+
+  it('should prevent form submission if tag checks fail', async () => {
+    for (let i = 0; i < tagSets.length; i += 1) {
+      taginputEl.innerText = tagSets[i];
+
+      if (await submitForm(form)) {
+        // form submit succeeded
+        await waitFor(() => {
+          assertSubmitButtonIsDisabled();
+          const succeededUnloadEvent = new Event('beforeunload', { cancelable: true });
+          expect(fireEvent(window, succeededUnloadEvent)).toBe(true);
+        });
+      } else {
+        // form submit prevented
+        const frm = form;
+        await waitFor(() => {
+          assertSubmitButtonIsEnabled();
+          expect(frm.querySelectorAll('.help-block')).toHaveLength(tagErrorCounts[i]);
+        });
+      }
+    }
   });
 });
