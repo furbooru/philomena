@@ -14,7 +14,10 @@ defmodule Philomena.Repo.Migrations.ConvertUserThemes do
   def down do
     execute("update users set theme = 'light' where theme = 'light-blue';")
     execute("update users set theme = 'dark' where theme = 'dark-blue';")
-    execute("update users set theme = 'default' where theme like 'dark-%' or theme like 'light-%';")
+
+    execute(
+      "update users set theme = 'default' where theme like 'dark-%' or theme like 'light-%';"
+    )
 
     alter table("users") do
       modify :theme, :varchar, default: "default"
