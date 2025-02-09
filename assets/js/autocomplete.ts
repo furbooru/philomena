@@ -44,7 +44,13 @@ function applySelectedValue(selection: string) {
   if (!inputField) return;
 
   if (!isSearchField(inputField)) {
-    inputField.value = selection;
+    let resultValue = selection;
+
+    if (originalTerm?.startsWith('-')) {
+      resultValue = `-${selection}`;
+    }
+
+    inputField.value = resultValue;
     return;
   }
 
@@ -121,6 +127,10 @@ function toggleSearchAutocomplete() {
   }
 }
 
+function trimPrefixes(targetTerm: string): string {
+  return targetTerm.trim().replace(/^-/, '');
+}
+
 function listenAutocomplete() {
   let serverSideSuggestionsTimeout: number | undefined;
 
@@ -162,8 +172,7 @@ function listenAutocomplete() {
       }
 
       const suggestions = localAc
-        .matchPrefix(originalTerm)
-        .topK(suggestionsCount)
+        .matchPrefix(trimPrefixes(originalTerm), suggestionsCount)
         .map(({ name, imageCount }) => ({ label: `${name} (${imageCount})`, value: name }));
 
       if (suggestions.length) {
@@ -181,13 +190,13 @@ function listenAutocomplete() {
       inputField = targetedInput;
       originalTerm = inputField.value;
 
-      const fetchedTerm = inputField.value;
+      const fetchedTerm = trimPrefixes(inputField.value);
 
       if (minTermLength && fetchedTerm.length < parseInt(minTermLength, 10)) return;
 
       fetchSuggestions(endpointUrl, fetchedTerm).then(suggestions => {
         // inputField could get overwritten while the suggestions are being fetched - use previously targeted input
-        if (fetchedTerm === targetedInput.value) {
+        if (fetchedTerm === trimPrefixes(targetedInput.value)) {
           popup.renderSuggestions(suggestions).showForField(targetedInput);
         }
       });
@@ -222,8 +231,12 @@ function listenAutocomplete() {
     const originalSuggestion = event.detail;
     applySelectedValue(originalSuggestion.value);
 
+    if (originalTerm?.startsWith('-')) {
+      originalSuggestion.value = `-${originalSuggestion.value}`;
+    }
+
     inputField.dispatchEvent(
-      new CustomEvent('autocomplete', {
+      new CustomEvent<TermSuggestion>('autocomplete', {
         detail: Object.assign(
           {
             type: 'click',

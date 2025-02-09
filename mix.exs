@@ -72,7 +72,7 @@ defmodule Philomena.MixProject do
       {:inet_cidr, "~> 1.0"},
 
       # SMTP
-      {:swoosh, "~> 1.16"},
+      {:swoosh, "~> 1.17"},
       {:mua, "~> 0.2.0"},
       {:mail, "~> 0.3.0"},
 
@@ -90,7 +90,7 @@ defmodule Philomena.MixProject do
       {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false},
 
       # Static analysis
-      {:dialyxir, "~> 1.2", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
 
       # Fixes for Elixir v1.15+
       {:canary, "~> 1.1",

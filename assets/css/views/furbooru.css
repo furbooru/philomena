@@ -1,0 +1,43 @@
+:root {
+  --logo-color: #9a91d9;
+}
+
+i.favicon-home {
+  position: relative;
+  top: 4px;
+  font-size: 20px;
+  background-image: unset !important;
+  background-color: var(--logo-color);
+  -webkit-mask-image: url("/favicon.svg");
+  mask-image: url("/favicon.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+.block__content--destroyed {
+  background-color: var(--destroyed-content-color) !important;
+}
+
+.communication--hidden .communication__interaction {
+  margin: 0;
+}
+
+.tag {
+  border: 0 !important;
+  padding: 1px 0;
+  vertical-align: middle;
+}
+
+.tag__name {
+  margin-right: 8px;
+}
+
+.tag__count {
+  margin-left: 8px;
+  padding: 0 4px;
+}
+
+.tag__interaction {
+  padding: 0 4px;
+}
