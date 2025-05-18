@@ -1,6 +1,6 @@
 article.block.communication id="post_#{@post.id}"
   = if not @post.approved and not @post.hidden_from_users and (can?(@conn, :hide, @post) or @post.user_id == @conn.assigns.current_user.id) do
-    .block__content
+    .block__content.communication__content
       .block.block--fixed.block--danger
         p
           i.fas.fa-exclamation-triangle>
@@ -21,23 +21,14 @@ article.block.communication id="post_#{@post.id}"
               = text_input f, :deletion_reason, class: "input input--wide", placeholder: "Deletion Reason", id: "inline-reject-reason-post-#{@post.id}", required: true
               = submit "Delete", class: "button"
 
-  .block__content.flex.flex--no-wrap class=communication_body_class(@post)
-    .flex__fixed.spacing-right
-      = unless @post.hidden_from_users do
+  .block__content.communication__content.flex.flex--no-wrap class=communication_body_class(@post)
+    .communication__body__avatar.hide-mobile
+      = render PhilomenaWeb.UserAttributionView, "_anon_user_avatar.html", object: @post, conn: @conn
+    .flex__grow.communication__body
+      .communication__body__avatar.hide-desktop
         = render PhilomenaWeb.UserAttributionView, "_anon_user_avatar.html", object: @post, conn: @conn
-      - else
-        .deleted_content_avatar_spacer
-          = unless can?(@conn, :hide, @post) do
-            .block__content.communication__options
-              ' Posted
-              => pretty_time(@post.created_at)
-              br
-              a.communication__interaction title="Link to post" href=(~p"/forums/#{@post.topic.forum}/topics/#{@post.topic}?#{[post_id: @post.id]}" <> "#post_#{@post.id}")
-                i.fa.fa-link>
-                ' Link
-    .flex__grow.communication__body class=communication_content_class(@post)
-      span.communication__body__sender-name = render PhilomenaWeb.UserAttributionView, "_anon_user.html", object: @post, awards: not @post.hidden_from_users, conn: @conn
-      = unless @post.hidden_from_users do
+      .communication__body__sender
+        span.communication__body__sender-name = render PhilomenaWeb.UserAttributionView, "_anon_user.html", object: @post, awards: true, conn: @conn
         br
         = render PhilomenaWeb.UserAttributionView, "_anon_user_title.html", object: @post, conn: @conn
       .communication__body__text

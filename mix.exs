@@ -4,7 +4,7 @@ defmodule Philomena.MixProject do
   def project do
     [
       app: :philomena,
-      version: "1.1.0",
+      version: "1.1.2",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
@@ -65,8 +65,7 @@ defmodule Philomena.MixProject do
       {:briefly, "~> 0.4"},
       {:req, "~> 0.5"},
       {:exq, "~> 0.17"},
-      {:ex_aws, "~> 2.0",
-       github: "liamwhite/ex_aws", ref: "a340859dd8ac4d63bd7a3948f0994e493e49bda4", override: true},
+      {:ex_aws, "~> 2.5"},
       {:ex_aws_s3, "~> 2.0"},
       {:sweet_xml, "~> 0.7"},
       {:inet_cidr, "~> 1.0"},

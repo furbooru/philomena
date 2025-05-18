@@ -1,6 +1,6 @@
 article.block.communication id="comment_#{@comment.id}"
   = if not @comment.approved and not @comment.hidden_from_users and (can?(@conn, :hide, @comment) or @comment.user_id == @conn.assigns.current_user.id) do
-    .block__content
+    .block__content.communication__content
       .block.block--fixed.block--danger
         p
           i.fas.fa-exclamation-triangle>
@@ -21,23 +21,14 @@ article.block.communication id="comment_#{@comment.id}"
               = text_input f, :deletion_reason, class: "input input--wide", placeholder: "Deletion Reason", id: "inline-reject-reason-comment-#{@comment.id}", required: true
               = submit "Delete", class: "button"
 
-  .block__content.flex.flex--no-wrap class=communication_body_class(@comment)
-    .flex__fixed.spacing-right
-      = unless @comment.hidden_from_users do
+  .block__content.communication__content.flex.flex--no-wrap class=communication_body_class(@comment)
+    .communication__body__avatar.hide-mobile
+      = render PhilomenaWeb.UserAttributionView, "_anon_user_avatar.html", object: @comment, conn: @conn
+    .flex__grow.communication__body
+      .communication__body__avatar.hide-desktop
         = render PhilomenaWeb.UserAttributionView, "_anon_user_avatar.html", object: @comment, conn: @conn
-      - else
-        .deleted_content_avatar_spacer
-          = unless can?(@conn, :hide, @comment) do
-            .block__content.communication__options
-              ' Posted
-              => pretty_time(@comment.created_at)
-              br
-              a.communication__interaction title="Link to comment" href=(~p"/images/#{@comment.image_id}" <> "#comment_#{@comment.id}")
-                i.fa.fa-link>
-                ' Link
-    .flex__grow.communication__body class=communication_content_class(@comment)
-      span.communication__body__sender-name = render PhilomenaWeb.UserAttributionView, "_anon_user.html", object: @comment, awards: not @comment.hidden_from_users, conn: @conn
-      = unless @comment.hidden_from_users do
+      .communication__body__sender
+        span.communication__body__sender-name = render PhilomenaWeb.UserAttributionView, "_anon_user.html", object: @comment, awards: true, conn: @conn
         br
         = render PhilomenaWeb.UserAttributionView, "_anon_user_title.html", object: @comment, conn: @conn
       .communication__body__text

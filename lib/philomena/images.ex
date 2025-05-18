@@ -289,6 +289,7 @@ defmodule Philomena.Images do
     image
     |> Image.lock_comments_changeset(locked)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -304,6 +305,7 @@ defmodule Philomena.Images do
     image
     |> Image.lock_description_changeset(locked)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -319,6 +321,7 @@ defmodule Philomena.Images do
     image
     |> Image.lock_tags_changeset(locked)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -335,6 +338,7 @@ defmodule Philomena.Images do
     image
     |> Image.remove_hash_changeset()
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -350,6 +354,7 @@ defmodule Philomena.Images do
     image
     |> Image.scratchpad_changeset(attrs)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -366,6 +371,7 @@ defmodule Philomena.Images do
     |> Repo.preload(:source_changes)
     |> Image.remove_source_history_changeset()
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -447,6 +453,7 @@ defmodule Philomena.Images do
     image
     |> Image.changeset(attrs)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -462,6 +469,7 @@ defmodule Philomena.Images do
     image
     |> Image.description_changeset(attrs)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -570,6 +578,7 @@ defmodule Philomena.Images do
     |> Repo.preload(:locked_tags)
     |> Image.locked_tags_changeset(attrs, new_tags)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -751,6 +760,7 @@ defmodule Philomena.Images do
     image
     |> Image.uploader_changeset(attrs)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -766,6 +776,7 @@ defmodule Philomena.Images do
     image
     |> Image.anonymous_changeset(attrs)
     |> Repo.update()
+    |> reindex_after_update()
   end
 
   @doc """
@@ -784,7 +795,11 @@ defmodule Philomena.Images do
     image
     |> Image.hide_reason_changeset(attrs)
     |> Repo.update()
-    |> case do
+    |> reindex_after_update()
+  end
+
+  defp reindex_after_update(result) do
+    case result do
       {:ok, image} ->
         reindex_image(image)
 
@@ -862,6 +877,12 @@ defmodule Philomena.Images do
   def merge_image(multi \\ nil, %Image{} = image, duplicate_of_image, user) do
     multi = multi || Multi.new()
 
+    image =
+      Repo.preload(image, [:user, :intensity, :sources, tags: :aliases])
+
+    duplicate_of_image =
+      Repo.preload(duplicate_of_image, [:user, :intensity, :sources, tags: :aliases])
+
     image
     |> Image.merge_changeset(duplicate_of_image)
     |> hide_image_multi(image, user, multi)
@@ -875,12 +896,8 @@ defmodule Philomena.Images do
     |> Multi.run(:copy_tags, fn _, %{} ->
       {:ok, Tags.copy_tags(image, duplicate_of_image)}
     end)
-    |> Multi.run(:migrate_sources, fn repo, %{} ->
-      {:ok,
-       migrate_sources(
-         repo.preload(image, [:sources]),
-         repo.preload(duplicate_of_image, [:sources])
-       )}
+    |> Multi.run(:migrate_sources, fn _, %{} ->
+      {:ok, migrate_sources(image, duplicate_of_image)}
     end)
     |> Multi.run(:migrate_comments, fn _, %{} ->
       {:ok, Comments.migrate_comments(image, duplicate_of_image)}
@@ -898,6 +915,16 @@ defmodule Philomena.Images do
       {:ok, result} ->
         reindex_image(duplicate_of_image)
         Comments.reindex_comments(duplicate_of_image)
+
+        PhilomenaWeb.Endpoint.broadcast!(
+          "firehose",
+          "image:merge",
+          %{
+            image: PhilomenaWeb.Api.Json.ImageView.render("image.json", %{image: image}),
+            duplicate_of_image:
+              PhilomenaWeb.Api.Json.ImageView.render("image.json", %{image: duplicate_of_image})
+          }
+        )
 
         {:ok, result}
 
