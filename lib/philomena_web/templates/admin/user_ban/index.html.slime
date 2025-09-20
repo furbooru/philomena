@@ -5,12 +5,12 @@ h1 User Bans
 
 = form_for :user_ban, ~p"/admin/user_bans", [method: "get", class: "hform"], fn f ->
   .field
-    = text_input f, :bq, name: :bq, value: @conn.params["bq"], class: "hform__text input", placeholder: "Search"
+    = text_input f, :bq, name: :bq, value: @conn.params["bq"], class: "hform__text input", placeholder: "Search", spellcheck: "false"
     = submit "Search", class: "button hform__button"
 
 .block
   .block__header
-    = pagination
+    .page__pagination = pagination
 
   .block__content
     table.table
@@ -55,4 +55,4 @@ h1 User Bans
                   => link "Destroy", to: ~p"/admin/user_bans/#{ban}", data: [confirm: "Are you really, really sure?", method: "delete"]
 
   .block__header.block__header--light
-    = pagination
+    .page__pagination = pagination

@@ -5,7 +5,7 @@ h1 Livestreams
 
 = form_for :channels, ~p"/channels", [method: "get", class: "hform", enforce_utf8: false], fn f ->
   .field
-    = text_input f, :cq, name: :cq, value: @conn.params["cq"], class: "input hform__text", placeholder: "Search channels", autocapitalize: "none"
+    = text_input f, :cq, name: :cq, value: @conn.params["cq"], class: "input hform__text", placeholder: "Search channels", autocapitalize: "none", spellcheck: "false"
     = submit "Search", class: "hform__button button"
 
 .block
@@ -22,8 +22,9 @@ h1 Livestreams
         ' Show NSFW streams
 
   .block__content
-    = for channel <- @channels do
-      = render PhilomenaWeb.ChannelView, "_channel_box.html", channel: channel, conn: @conn, subscriptions: @subscriptions
+    .media-list
+      = for channel <- @channels do
+        = render PhilomenaWeb.ChannelView, "_channel_box.html", channel: channel, conn: @conn, subscriptions: @subscriptions
 
   .block__header.page__header
     .page__pagination = pagination

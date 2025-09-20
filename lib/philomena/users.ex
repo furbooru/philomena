@@ -7,6 +7,7 @@ defmodule Philomena.Users do
   alias Ecto.Multi
   alias Philomena.Repo
 
+  alias Philomena.Schema.Approval
   alias Philomena.Users.{User, UserToken, UserNotifier, Uploader}
   alias Philomena.{Forums, Forums.Forum}
   alias Philomena.Topics
@@ -625,6 +626,22 @@ defmodule Philomena.Users do
     user
     |> User.description_changeset(attrs)
     |> Repo.update()
+    |> case do
+      {:ok, user} ->
+        if not Approval.approved?(user, user.description, :external_links) or
+             not Approval.approved?(user, user.personal_title, :external_links) do
+          Reports.create_system_report(
+            {"User", user.id},
+            "Review",
+            "Profile contains external links"
+          )
+        end
+
+        {:ok, user}
+
+      error ->
+        error
+    end
   end
 
   @doc """
@@ -943,7 +960,10 @@ defmodule Philomena.Users do
   defp setup_roles(nil), do: nil
 
   defp setup_roles(user) do
-    role_map = Map.new(user.roles, &{&1.resource_type || &1.name, &1.name})
+    role_map =
+      user.roles
+      |> Enum.group_by(& &1.resource_type, & &1.name)
+      |> Map.new(fn {type, names} -> {type, Map.new(names, &{&1, []})} end)
 
     %{user | role_map: role_map}
   end

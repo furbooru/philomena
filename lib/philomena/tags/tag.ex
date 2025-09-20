@@ -152,6 +152,7 @@ defmodule Philomena.Tags.Tag do
     |> String.split(",")
     |> Enum.map(&clean_tag_name/1)
     |> Enum.reject(&("" == &1))
+    |> Enum.uniq()
   end
 
   def display_order(tags) do
@@ -224,9 +225,10 @@ defmodule Philomena.Tags.Tag do
     do: original_name
 
   defp ununderscore(name) do
-    case String.starts_with?(name, @underscore_safe_namespaces) do
-      true -> name
-      false -> String.replace(name, "_", " ")
+    if String.starts_with?(name, @underscore_safe_namespaces) do
+      name
+    else
+      String.replace(name, "_", " ")
     end
   end
 

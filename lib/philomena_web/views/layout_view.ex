@@ -15,10 +15,16 @@ defmodule PhilomenaWeb.LayoutView do
 
   def container_class(_user), do: "layout--center-aligned"
 
+  def philomena_version, do: Application.spec(:philomena, :vsn)
+
   def render_time(conn) do
     (Time.diff(Time.utc_now(), conn.assigns[:start_time], :microsecond) / 1000.0)
     |> Float.round(3)
     |> Float.to_string()
+  end
+
+  def hide_version do
+    Application.get_env(:philomena, :hide_version) == "true"
   end
 
   def cdn_host do
@@ -27,6 +33,14 @@ defmodule PhilomenaWeb.LayoutView do
 
   def vite_reload? do
     Application.get_env(:philomena, :vite_reload)
+  end
+
+  def generator_name do
+    if hide_version() do
+      "Philomena"
+    else
+      "Philomena v#{philomena_version()}"
+    end
   end
 
   defp ignored_tag_list(nil), do: []
@@ -44,9 +58,9 @@ defmodule PhilomenaWeb.LayoutView do
 
     data = [
       filter_id: filter.id,
-      hidden_tag_list: Jason.encode!(filter.hidden_tag_ids),
+      hidden_tag_list: JSON.encode!(filter.hidden_tag_ids),
       hidden_filter: PhilomenaQuery.Parse.String.normalize(filter.hidden_complex_str || ""),
-      spoilered_tag_list: Jason.encode!(filter.spoilered_tag_ids),
+      spoilered_tag_list: JSON.encode!(filter.spoilered_tag_ids),
       spoilered_filter: PhilomenaQuery.Parse.String.normalize(filter.spoilered_complex_str || ""),
       user_id: if(user, do: user.id, else: nil),
       user_name: if(user, do: user.name, else: nil),
@@ -54,11 +68,11 @@ defmodule PhilomenaWeb.LayoutView do
       user_is_signed_in: if(user, do: "true", else: "false"),
       user_can_edit_filter: if(user, do: filter.user_id == user.id, else: "false") |> to_string(),
       spoiler_type: if(user, do: user.spoiler_type, else: "static"),
-      watched_tag_list: Jason.encode!(if(user, do: user.watched_tag_ids, else: [])),
+      watched_tag_list: JSON.encode!(if(user, do: user.watched_tag_ids, else: [])),
       fancy_tag_edit: if(user, do: user.fancy_tag_field_on_edit, else: "true") |> to_string(),
       fancy_tag_upload: if(user, do: user.fancy_tag_field_on_upload, else: "true") |> to_string(),
-      interactions: Jason.encode!(interactions),
-      ignored_tag_list: Jason.encode!(ignored_tag_list(conn.assigns[:tags])),
+      interactions: JSON.encode!(interactions),
+      ignored_tag_list: JSON.encode!(ignored_tag_list(conn.assigns[:tags])),
       hide_staff_tools: conn.cookies["hide_staff_tools"] |> to_string()
     ]
 
@@ -131,9 +145,10 @@ defmodule PhilomenaWeb.LayoutView do
   def viewport_meta_tag(conn) do
     ua = get_user_agent(conn)
 
-    case String.contains?(ua, ["Mobile", "webOS"]) do
-      true -> tag(:meta, name: "viewport", content: "width=device-width, initial-scale=1")
-      _false -> tag(:meta, name: "viewport", content: "width=1024, initial-scale=1")
+    if String.contains?(ua, ["Mobile", "webOS"]) do
+      tag(:meta, name: "viewport", content: "width=device-width, initial-scale=1")
+    else
+      tag(:meta, name: "viewport", content: "width=1024, initial-scale=1")
     end
   end
 

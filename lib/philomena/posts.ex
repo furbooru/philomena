@@ -134,7 +134,7 @@ defmodule Philomena.Posts do
     Reports.create_system_report(
       {"Post", post.id},
       "Approval",
-      "Post contains externally-embedded images and has been flagged for review."
+      "Post contains external links"
     )
   end
 
@@ -296,7 +296,7 @@ defmodule Philomena.Posts do
     |> Repo.transaction()
     |> case do
       {:ok, %{post: post, reports: {_count, reports}}} ->
-        UserStatistics.inc_stat(post.user, :forum_posts)
+        UserStatistics.inc_stat(post.user_id, :forum_posts)
         Reports.reindex_reports(reports)
         reindex_post(post)
 

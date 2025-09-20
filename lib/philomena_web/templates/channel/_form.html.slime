@@ -16,7 +16,7 @@
     code>
       | https://piczel.tv/watch/
       em piczel_channel_name
-    ' is 
+    ' is
     code piczel_channel_name
     ' .
     br
@@ -32,6 +32,6 @@
 
   .field
     => label f, :artist_tag, "Artist tag"
-    = text_input f, :artist_tag, class: "input", placeholder: "Artist tag"
+    = text_input f, :artist_tag, class: "input", placeholder: "Artist tag", spellcheck: "false"
 
   = submit "Save", class: "button"

@@ -5,13 +5,16 @@ defmodule PhilomenaWeb.ImageController do
   alias PhilomenaWeb.CommentLoader
   alias PhilomenaWeb.NotificationCountPlug
   alias PhilomenaWeb.MarkdownRenderer
+  alias PhilomenaWeb.ImageScope
 
   alias Philomena.{
     Images,
     Images.Image,
     Images.Source,
     Comments.Comment,
-    Galleries.Gallery
+    Galleries.Gallery,
+    TagChanges.TagChange,
+    SourceChanges.SourceChange
   }
 
   alias PhilomenaQuery.Search
@@ -37,8 +40,7 @@ defmodule PhilomenaWeb.ImageController do
   plug PhilomenaWeb.AdvertPlug when action in [:show]
 
   def index(conn, _params) do
-    {:ok, {images, _tags}} =
-      ImageLoader.search_string(conn, "created_at.lte:2 minutes ago, -thumbnails_generated:false")
+    {images, _tags} = ImageLoader.default_query(conn)
 
     images = Search.search_records(images, preload(Image, [:sources, tags: :aliases]))
 
@@ -48,7 +50,8 @@ defmodule PhilomenaWeb.ImageController do
       title: "Images",
       layout_class: "layout--wide",
       images: images,
-      interactions: interactions
+      interactions: interactions,
+      scope: ImageScope.scope(conn)
     )
   end
 
@@ -171,27 +174,40 @@ defmodule PhilomenaWeb.ImageController do
   defp load_image(conn, _opts) do
     id = conn.params["id"]
 
-    {image, tag_changes, source_changes} =
+    {image, tag_changes, tag_changes_tags, source_changes} =
       Image
+      |> from(as: :image)
       |> where(id: ^id)
       |> join(
         :inner_lateral,
-        [i],
-        _ in fragment("SELECT COUNT(*) FROM tag_changes t WHERE t.image_id = ?", i.id),
+        [],
+        subquery(
+          TagChange
+          |> where(image_id: parent_as(:image).id)
+          |> join(:left, [c], t in assoc(c, :tags))
+          |> select([c, t], %{
+            change_count: count(c, :distinct),
+            tag_count: count(t)
+          })
+        ),
         on: true
       )
       |> join(
         :inner_lateral,
-        [i, _],
-        _ in fragment("SELECT COUNT(*) FROM source_changes s WHERE s.image_id = ?", i.id),
+        [],
+        subquery(
+          SourceChange
+          |> where(image_id: parent_as(:image).id)
+          |> select(%{count: count()})
+        ),
         on: true
       )
       |> preload([:deleter, :locked_tags, :sources, user: [awards: :badge], tags: :aliases])
-      |> select([i, t, s], {i, t.count, s.count})
+      |> select([i, t, s], {i, t.change_count, t.tag_count, s.count})
       |> Repo.one()
       |> case do
         nil ->
-          {nil, nil, nil}
+          {nil, nil, nil, nil}
 
         result ->
           result
@@ -215,6 +231,7 @@ defmodule PhilomenaWeb.ImageController do
         conn
         |> assign(:image, image)
         |> assign(:tag_change_count, tag_changes)
+        |> assign(:tag_change_tag_count, tag_changes_tags)
         |> assign(:source_change_count, source_changes)
     end
   end
