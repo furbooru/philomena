@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.4
--- Dumped by pg_dump version 17.4
+-- Dumped from database version 17.6
+-- Dumped by pg_dump version 17.6
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2204,7 +2204,7 @@ CREATE TABLE public.users (
     verified boolean DEFAULT false,
     delay_home_images boolean DEFAULT true,
     staff_delay_home_images boolean DEFAULT false,
-    borderless_tags boolean DEFAULT false,
+    borderless_tags boolean DEFAULT true,
     rounded_tags boolean DEFAULT false
 );
 
@@ -4454,20 +4454,6 @@ CREATE INDEX intensities_index ON public.images USING btree (se_intensity, sw_in
 
 
 --
--- Name: unique_users_name_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX unique_users_name_index ON public.users USING btree (name);
-
-
---
--- Name: unique_users_slug_index; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX unique_users_slug_index ON public.users USING btree (slug);
-
-
-
 -- Name: moderation_logs_created_at_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4549,6 +4535,20 @@ CREATE INDEX tag_changes_ip_inet_ops_index ON public.tag_changes USING gist (ip 
 --
 
 CREATE INDEX tag_changes_user_id_index ON public.tag_changes USING btree (user_id);
+
+
+--
+-- Name: unique_users_name_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX unique_users_name_index ON public.users USING btree (name);
+
+
+--
+-- Name: unique_users_slug_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX unique_users_slug_index ON public.users USING btree (slug);
 
 
 --
@@ -5577,6 +5577,8 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
+\unrestrict Xc0SKgGirzSeTRTQz4BdizgorVUaHjxePgegO5lcfE0nkn461idpj9VBJEsFuK8
+
 INSERT INTO public."schema_migrations" (version) VALUES (20200503002523);
 INSERT INTO public."schema_migrations" (version) VALUES (20200607000511);
 INSERT INTO public."schema_migrations" (version) VALUES (20200617111116);
@@ -5604,3 +5606,4 @@ INSERT INTO public."schema_migrations" (version) VALUES (20250407021536);
 INSERT INTO public."schema_migrations" (version) VALUES (20250501174007);
 INSERT INTO public."schema_migrations" (version) VALUES (20250502110018);
 INSERT INTO public."schema_migrations" (version) VALUES (20250507183410);
+INSERT INTO public."schema_migrations" (version) VALUES (20250921082812);

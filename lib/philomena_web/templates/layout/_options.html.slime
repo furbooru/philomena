@@ -4,3 +4,5 @@
 
   = if @current_user.rounded_tags do
     link rel="stylesheet" href=~p"/css/options/tag-rounded-border.css"
+- else
+  link rel="stylesheet" href=~p"/css/options/tag-no-border.css"
