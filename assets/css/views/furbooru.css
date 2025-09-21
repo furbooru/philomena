@@ -22,22 +22,3 @@ i.favicon-home {
 .communication--hidden .communication__interaction {
   margin: 0;
 }
-
-.tag {
-  border: 0 !important;
-  padding: 1px 0;
-  vertical-align: middle;
-}
-
-.tag__name {
-  margin-right: 8px;
-}
-
-.tag__count {
-  margin-left: 8px;
-  padding: 0 4px;
-}
-
-.tag__interaction {
-  padding: 0 4px;
-}
