@@ -60,4 +60,10 @@ defmodule PhilomenaWeb.Api.Json.CommentView do
       edit_reason: comment.edit_reason
     }
   end
+
+  def render("error.json", %{changeset: changeset}) do
+    %{
+      errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
+    }
+  end
 end
