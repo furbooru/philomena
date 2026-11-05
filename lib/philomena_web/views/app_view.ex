@@ -166,28 +166,6 @@ defmodule PhilomenaWeb.AppView do
   def communication_content_class(%{hidden_from_users: true}), do: "communication__body--hidden"
   def communication_content_class(_communication), do: nil
 
-  def can_view_communication?(conn, communication) do
-    cond do
-      can?(conn, :hide, communication) and not hide_staff_tools?(conn) ->
-        true
-
-      communication.destroyed_content ->
-        false
-
-      not communication.approved ->
-        %{user_id: user_id, ip: %{address: ip}} = communication
-
-        case conn do
-          %{assigns: %{current_user: %{id: ^user_id}}} -> true
-          %{remote_ip: ^ip} -> true
-          _ -> false
-        end
-
-      true ->
-        true
-    end
-  end
-
   def hide_staff_tools?(conn),
     do: conn.cookies["hide_staff_tools"] == "true"
 

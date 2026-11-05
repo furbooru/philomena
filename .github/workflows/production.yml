@@ -41,7 +41,7 @@ jobs:
         with:
           context: .
           file: ./docker/production/Dockerfile
-          platforms: 'linux/amd64'
+          platforms: ${{ github.ref != 'refs/heads/master' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -79,13 +79,13 @@ jobs:
         with:
           context: .
           file: ./docker/production/web/Dockerfile
-          platforms: 'linux/amd64'
+          platforms: ${{ github.ref != 'refs/heads/master' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  build-and-push-fiberglass:
-    name: 'Build and Publish Fiberglass Server'
+  build-and-push-mediaproc:
+    name: 'Build and Publish Mediaproc'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -110,14 +110,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/philomena-dev/fiberglass-server
+          images: ghcr.io/philomena-dev/mediaproc
 
-      - name: Build and push Fiberglass Media Processing image
+      - name: Build and push Media Processing image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./docker/production/fiberglass/Dockerfile
-          platforms: 'linux/amd64'
+          file: ./docker/mediaproc/Dockerfile
+          platforms: ${{ github.ref != 'refs/heads/master' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

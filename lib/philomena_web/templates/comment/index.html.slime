@@ -2,7 +2,16 @@ h1 Comments
 
 = form_for :comments, ~p"/comments", [method: "get", class: "hform", enforce_utf8: false], fn f ->
   .field
-    = text_input f, :cq, name: :cq, value: @conn.params["cq"], class: "input hform__text", placeholder: "Search comments", autocapitalize: "none", spellcheck: "false"
+    = text_input f, :cq, name: :cq, value: @conn.params["cq"],
+      class: "input hform__text",
+      placeholder: "Search comments",
+      autocapitalize: "none",
+      spellcheck: "false",
+      autocomplete: if(@conn.cookies["enable_search_ac"], do: "on", else: "off"),
+      inputmode: "search",
+      data: [ \
+        autocomplete: "properties",
+      ]
     = submit "Search", class: "hform__button button"
 
   .fieldlabel
@@ -17,7 +26,7 @@ h2 Search Results
     - route = fn p -> ~p"/comments?#{p}" end
     - pagination = render PhilomenaWeb.PaginationView, "_pagination.html", page: @comments, route: route, params: [cq: @conn.params["cq"]], conn: @conn
 
-    = for {body, comment} <- @comments, comment.image.hidden_from_users == false and can_view_communication?(@conn, comment) do
+    = for {body, comment} <- @comments do
       = render PhilomenaWeb.CommentView, "_comment_with_image.html", body: body, comment: comment, conn: @conn
 
     .block

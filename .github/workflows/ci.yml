@@ -53,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
       # Uses the `rust-toolchain.toml` file
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
@@ -84,6 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -92,9 +94,12 @@ jobs:
 
       - run: npm ci --ignore-scripts
         working-directory: ./assets
+
       - run: npm run lint
         working-directory: ./assets
+
       - run: npm run test
         working-directory: ./assets
+
       - run: npm run build
         working-directory: ./assets
