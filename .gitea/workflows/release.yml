@@ -32,6 +32,11 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: https://github.com/docker/setup-buildx-action@v3
+        with:
+          # dind's bridges default to MTU 1500 but the pod network is 1370
+          # (flannel over WireGuard); oversized packets get dropped and
+          # downloads in RUN steps hang. Use the pod's network directly.
+          driver-opts: network=host
 
       - name: Log in to Gitea container registry
         uses: https://github.com/docker/login-action@v3
