@@ -37,7 +37,7 @@ jobs:
         uses: https://github.com/docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ vars.REGISTRY_USERNAME }}
+          username: ${{ vars.REGISTRY_USERNAME || secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD || vars.REGISTRY_PASSWORD }}
 
       - name: Extract metadata for Docker
