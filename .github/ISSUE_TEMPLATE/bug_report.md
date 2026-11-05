@@ -8,6 +8,7 @@ assignees: ''
 
 **Important note**
 If the bug you are reporting is not specific to Furbooru, please send your report to the [upstream repository](https://github.com/philomena-dev/philomena) instead.
+
 - [ ] My bug report is specific to Furbooru
 
 **Describe the bug**

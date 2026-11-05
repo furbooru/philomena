@@ -1,11 +1,5 @@
 {
-  "tabs": [
-    "Main",
-    "Species",
-    "Franchises",
-    "Sexual Interactions",
-    "Misc."
-  ],
+  "tabs": ["Main", "Species", "Franchises", "Sexual Interactions", "Misc."],
   "tab_modes": {
     "Main": "default",
     "Species": "default",
@@ -14,23 +8,8 @@
     "Misc.": "default"
   },
   "Main": {
-    "Ratings": [
-      "safe",
-      "suggestive",
-      "questionable",
-      "explicit",
-      "grimdark",
-      "grotesque"
-    ],
-    "Genders": [
-      "male",
-      "female",
-      "intersex male",
-      "intersex female",
-      "herm",
-      "maleherm",
-      "ambiguous gender"
-    ],
+    "Ratings": ["safe", "suggestive", "questionable", "explicit", "grimdark", "grotesque"],
+    "Genders": ["male", "female", "intersex male", "intersex female", "herm", "maleherm", "ambiguous gender"],
     "Often Forgotten": [
       "solo",
       "duo",
@@ -57,42 +36,9 @@
     ]
   },
   "Species": {
-    "Specific 1": [
-      "bear",
-      "cat",
-      "crocodilian",
-      "deer",
-      "dog",
-      "fox",
-      "goat",
-      "hedgehog",
-      "horse",
-      "human"
-    ],
-    "Specific 2": [
-      "hyena",
-      "lion",
-      "lizard",
-      "otter",
-      "pony",
-      "rabbit",
-      "shark",
-      "snake",
-      "tiger",
-      "wolf"
-    ],
-    "General": [
-      "arthropod",
-      "bird",
-      "big cat",
-      "canine",
-      "dinosaur",
-      "equine",
-      "feline",
-      "fish",
-      "mammal",
-      "reptile"
-    ],
+    "Specific 1": ["bear", "cat", "crocodilian", "deer", "dog", "fox", "goat", "hedgehog", "horse", "human"],
+    "Specific 2": ["hyena", "lion", "lizard", "otter", "pony", "rabbit", "shark", "snake", "tiger", "wolf"],
+    "General": ["arthropod", "bird", "big cat", "canine", "dinosaur", "equine", "feline", "fish", "mammal", "reptile"],
     "Fantasy": [
       "alicorn",
       "alien",
@@ -105,11 +51,7 @@
       "undead",
       "unicorn"
     ],
-    "Misc": [
-      "hybrid",
-      "fictional species",
-      "ambiguous species"
-    ]
+    "Misc": ["hybrid", "fictional species", "ambiguous species"]
   },
   "Franchises": {
     "Popular": [
@@ -187,15 +129,7 @@
       "antlers",
       "wings"
     ],
-    "Features 2": [
-      "horn",
-      "horns",
-      "fangs",
-      "teeth",
-      "whiskers",
-      "tail",
-      "multiple tails"
-    ],
+    "Features 2": ["horn", "horns", "fangs", "teeth", "whiskers", "tail", "multiple tails"],
     "NSFW": [
       "penis",
       "vulva",
@@ -244,13 +178,7 @@
       "shoulder fluff",
       "tail fluff"
     ],
-    "Body coverings": [
-      "hair",
-      "fur",
-      "scales",
-      "feathers",
-      "mane"
-    ],
+    "Body coverings": ["hair", "fur", "scales", "feathers", "mane"],
     "Backgrounds": [
       "simple background",
       "abstract background",
