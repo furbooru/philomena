@@ -13,7 +13,7 @@ meta name="format-detection" content="telephone=no"
 
   meta name="keywords" content=tag_list(image)
   meta name="description" content=title
-  meta property="og:site_name" content="Derpibooru"
+  meta property="og:site_name" content="Furbooru"
   meta property="og:title" content=title
   meta property="og:description" content=description
   meta property="og:url" content=url(~p"/images/#{image}")
